@@ -97,6 +97,9 @@
 <!--! ![image](https://github.com/end-4/dots-hyprland/assets/97237370/354431f6-8939-487f-9292-0bac71cf9ca8) -->
 ![image](https://github.com/end-4/dots-hyprland/assets/97237370/14e9725c-789f-4412-87b6-cce9504db109)
 
+**Cool Wallpaper Selector**
+![image](https://github.com/user-attachments/assets/a0264f52-8ecc-46d8-b3ac-6737ffb3c32e)
+
 > [!WARNING]
 > - Only the above is maintained
 > - Stuff below:
@@ -131,7 +134,9 @@
     <h3></h3>
 </div>
 
+ - [@end-4](https://github.com/end-4) for base config
  - [@clsty](https://github.com/clsty) for making an actually good install script + many other stuff that I neglect
+ - [@sh1zicus](https://github.com/sh1zicus) for the code of wallpaper selector and much i borrow from
  - [@midn8hustlr](https://github.com/midn8hustlr) for greatly improving the color generation system
  - AGS: [Aylur's config](https://github.com/Aylur/dotfiles), [kotontrion's config](https://github.com/kotontrion/dotfiles)
  - EWW: [fufexan's config](https://github.com/fufexan/dotfiles) (he thanks more people there btw)
