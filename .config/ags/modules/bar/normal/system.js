@@ -89,6 +89,11 @@ const Utilities = () => Box({
                 toggleWindowOnAllMonitors('osk');
             }
         }),
+        UtilButton({
+            name: getString('Wallpaper Selector'), icon: 'image', onClicked: () => {
+                App.toggleWindow('wallselect');
+            }
+        }),
     ]
 })
 
