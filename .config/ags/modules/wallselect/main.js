@@ -131,7 +131,7 @@ const createPlaceholder = () => Box({
                     className: 'txt-large txt-bold',
                 }),
                 Label({
-                    label: 'Generate thumbnails to get started.',
+                    label: 'Generate thumbnails to get started, place wallpapers in ~/Pictures/Wallpapers.',
                     className: 'txt-norm txt-subtext',
                 }),
             ],
