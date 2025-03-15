@@ -21,6 +21,7 @@ import ModuleAudioControls from "./centermodules/audiocontrols.js";
 import ModuleWifiNetworks from "./centermodules/wifinetworks.js";
 import ModuleBluetooth from "./centermodules/bluetooth.js";
 import ModuleConfigure from "./centermodules/configure.js";
+import ModuleTaskManager from "./centermodules/taskmanager.js";
 import { ModuleCalendar } from "./calendar.js";
 import { getDistroIcon } from '../.miscutils/system.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
@@ -60,6 +61,11 @@ const centerWidgets = [
         materialIcon: 'wifi',
         contentWidget: ModuleWifiNetworks,
         onFocus: () => execAsync('nmcli dev wifi list').catch(print),
+    },
+    {
+        name: getString("Task Manager"),
+        materialIcon: "monitor_heart",
+        contentWidget: ModuleTaskManager,
     },
     {
         name: getString('Live config'),
