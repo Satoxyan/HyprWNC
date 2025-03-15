@@ -54,8 +54,8 @@ elif [[ "$1" ]]; then
 	switch "$1"
 else
 	# Get a random image
-	imgpath=$(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.bmp" -o -iname "*.webp" \) | shuf -n 1)
-	switch "$imgpath"
+	imgpath=$(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.bmp" -o -iname "*.webp" \) ! -path "$WALLPAPER_DIR/thumbnails/*" | shuf -n 1)
+    switch "$imgpath"
 fi
 
 # Generate colors for ags n stuff
