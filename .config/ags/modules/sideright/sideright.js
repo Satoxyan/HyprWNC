@@ -63,7 +63,7 @@ const centerWidgets = [
         onFocus: () => execAsync('nmcli dev wifi list').catch(print),
     },
     {
-        name: getString("Task Manager"),
+        name: getString("System Monitor"),
         materialIcon: "monitor_heart",
         contentWidget: ModuleTaskManager,
     },

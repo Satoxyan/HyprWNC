@@ -158,7 +158,7 @@ export default () => {
                     Label({
                         xalign: 0,
                         className: 'txt txt-bold',
-                        label: 'Task Manager',
+                        label: 'System Monitor',
                     }),
                     Box({ hexpand: true }),
                     Button({
