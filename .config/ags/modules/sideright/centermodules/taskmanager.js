@@ -97,10 +97,10 @@ const getProcessList = async () => {
         const currentSystemTime = getSystemCPUTime();
         const newProcessTimes = new Map();
 
-        // Get list of processes sorted by current CPU usage (using top)
-        const topOutput = await execAsync(['top', '-b', '-n', '1', '-o', '%CPU', '-w', '512']);
+        // Get list of processes sorted by current MEM usage (using top)
+        const topOutput = await execAsync(['top', '-b', '-n', '1', '-o', '%MEM', '-w', '512']);
         const processes = topOutput.split('\n')
-            .slice(7) // Skip header lines
+            .slice(7)
             .filter(line => line.trim())
             .map(line => {
                 const parts = line.trim().split(/\s+/);
@@ -112,7 +112,6 @@ const getProcessList = async () => {
                 };
             });
 
-        // Calculate CPU percentage for each process
         processes.forEach(proc => {
             const procTime = getProcessCPUTime(proc.pid);
             if (procTime) {
@@ -122,15 +121,12 @@ const getProcessList = async () => {
                 }
             }
         });
-
-        // Update previous times for next calculation
         prevProcessTimes = newProcessTimes;
         prevSystemTime = currentSystemTime;
 
-        // Sort processes alphabetically by name
-        processes.sort((a, b) => a.name.localeCompare(b.name));
-
-        return processes;
+        // Sort processes by memory usage and get top 20
+        const topProcesses = processes.sort((a, b) => b.memory - a.memory).slice(0, 20);
+        return topProcesses;
     } catch (error) {
         print('Error getting process list:', error);
         return [];
@@ -180,15 +176,10 @@ export default () => {
             }),
         ],
     });
-
-    // Update process list every 2 seconds
     Utils.interval(2000, () => {
         updateProcessList();
         return true;
     });
-
-    // Initial update
     updateProcessList();
-
     return widget;
 };
