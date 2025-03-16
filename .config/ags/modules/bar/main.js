@@ -6,6 +6,7 @@ import WindowTitle from "./normal/spaceleft.js";
 import Indicators from "./normal/spaceright.js";
 import Music from "./normal/music.js";
 import System from "./normal/system.js";
+import RecordingIndicator from "./normal/recording.js";
 import { enableClickthrough } from "../.widgetutils/clickthrough.js";
 import { RoundedCorner } from "../.commonwidgets/cairo_roundedcorner.js";
 import { currentShellMode } from '../../variables.js';
@@ -59,6 +60,9 @@ export const Bar = async (monitor = 0) => {
             ]
         }),
         endWidget: Indicators(monitor),
+        endWidget: Widget.Box({
+            children: [RecordingIndicator(), Indicators()],
+        }),
     });
     const focusedBarContent = Widget.CenterBox({
         className: 'bar-bg-focus',
