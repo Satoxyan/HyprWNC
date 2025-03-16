@@ -107,7 +107,8 @@
 
  - [@end-4](https://github.com/end-4) for base config
  - [@clsty](https://github.com/clsty) for making an actually good install script + many other stuff that I neglect
- - [@sh1zicus](https://github.com/sh1zicus) for the code of wallpaper selector and much i borrow from
+ - [@sh1zicus](https://github.com/sh1zicus) for the wallpaper selector and much stuff i borrow from
+ - [@Pharmaracist](https://github.com/sh1zicus) for the task manager and much stuff i borrow from
  - [@midn8hustlr](https://github.com/midn8hustlr) for greatly improving the color generation system
  - AGS: [Aylur's config](https://github.com/Aylur/dotfiles), [kotontrion's config](https://github.com/kotontrion/dotfiles)
  - EWW: [fufexan's config](https://github.com/fufexan/dotfiles) (he thanks more people there btw)
