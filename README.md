@@ -1,6 +1,6 @@
 <div align="center">
-    <h1>【 end_4's Hyprland dotfiles 】</h1>
-    <h3></h3>
+    <h1>【 HyprWNC 】</h1>
+    <h3>cause i know that "Windows Never Could"</h3>
 </div>
 
 <div align="center"> 
