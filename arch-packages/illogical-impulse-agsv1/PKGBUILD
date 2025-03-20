@@ -20,8 +20,9 @@ arch=('x86_64')
 url="https://github.com/Aylur/ags"
 license=('GPL-3.0-only')
 makedepends=('git' 'gobject-introspection' 'meson' 'glib2-devel' 'npm' 'typescript')
-depends=('gvfs' 'gjs' 'glib2' 'glib2-devel' 'glibc' 'gtk3' 'gtk-layer-shell' 'libpulse' 'pam' 'gnome-bluetooth-3.0' 'gammastep')
+depends=('gvfs' 'gjs' 'glib2' 'glib2-devel' 'glibc' 'gtk3' 'gtk-layer-shell' 'libpulse' 'pam' 'gnome-bluetooth-3.0' 'gammastep' 'bluez-utils')
 optdepends=('gnome-bluetooth-3.0: required for bluetooth service'
+            'bluez-utils: required for bluetooth control'
             'greetd: required for greetd service'
             'libdbusmenu-gtk3: required for systemtray service'
             'libsoup3: required for the Utils.fetch feature'
