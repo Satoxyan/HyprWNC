@@ -107,7 +107,7 @@ const getProcessList = async () => {
                 return {
                     pid: parseInt(parts[0]),
                     cpu: parseFloat(parts[8]),
-                    memory: parseFloat(parts[9]).toFixed(1),
+                    memory: (parseFloat(parts[5]) / 1024).toFixed(1),
                     name: parts.slice(11).join(' ')
                 };
             });
