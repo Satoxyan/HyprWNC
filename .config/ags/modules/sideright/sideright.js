@@ -129,7 +129,7 @@ const timeRow = Box({
         }),
         Widget.Box({ hexpand: true }),
         ModuleReloadIcon({ hpack: 'end' }),
-        // ModuleSettingsIcon({ hpack: 'end' }), // Button does work, gnome-control-center is kinda broken
+        ModuleSettingsIcon({ hpack: 'end' }), // Button does work, gnome-control-center is kinda broken
         ModulePowerIcon({ hpack: 'end' }),
     ]
 });
