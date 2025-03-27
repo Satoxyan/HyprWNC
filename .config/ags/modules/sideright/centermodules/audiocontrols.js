@@ -1,7 +1,9 @@
 import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
 import Variable from 'resource:///com/github/Aylur/ags/variable.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Button, Icon, Label, Revealer, Scrollable, Slider, Stack } = Widget;
+const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 import { iconExists } from '../../.miscutils/icons.js';
@@ -205,12 +207,26 @@ export default (props) => {
             self.shown = (Audio.apps.length > 0 ? 'list' : 'empty')
         }),
     })
+    const bottomBar = Box({
+        homogeneous: true,
+        children: [Button({
+            hpack: 'center',
+            className: 'txt-small txt sidebar-centermodules-bottombar-button',
+            onClicked: () => {
+                execAsync(['bash', '-c', userOptions.apps.audio]).catch(print);
+                closeEverything();
+            },
+            label: getString('More'),
+            setup: setupCursorHover,
+        })],
+    })
     return Box({
         ...props,
         className: 'spacing-v-5',
         vertical: true,
         children: [
             mainContent,
+            bottomBar,
             devices,
         ]
     });
