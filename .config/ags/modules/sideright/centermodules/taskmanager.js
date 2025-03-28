@@ -97,18 +97,24 @@ const getProcessList = async () => {
         const currentSystemTime = getSystemCPUTime();
         const newProcessTimes = new Map();
 
-        // Get list of processes sorted by current MEM usage (using top)
-        const topOutput = await execAsync(['top', '-b', '-n', '1', '-o', '%MEM', '-w', '512']);
-        const processes = topOutput.split('\n')
-            .slice(7)
+        // Get RAM size from /proc/meminfo
+        const memInfo = Utils.readFile('/proc/meminfo');
+        const totalMemKB = parseInt(memInfo.match(/MemTotal:\s+(\d+)/)[1]); // Total dalam KB
+        const totalMemMB = totalMemKB / 1024; // Konversi ke MB
+
+        // Get the process with ps instead of top
+        const psOutput = await execAsync(['ps', '-eo', 'pid,%cpu,%mem,comm']);
+        const processes = psOutput.split('\n')
+            .slice(1)
             .filter(line => line.trim())
             .map(line => {
                 const parts = line.trim().split(/\s+/);
+                const memPercent = parseFloat(parts[2]);
                 return {
                     pid: parseInt(parts[0]),
-                    cpu: parseFloat(parts[8]),
-                    memory: (parseFloat(parts[5]) / 1024).toFixed(1),
-                    name: parts.slice(11).join(' ')
+                    cpu: parseFloat(parts[1]),
+                    memory: ((memPercent / 100) * totalMemMB).toFixed(1),
+                    name: parts.slice(3).join(' ') 
                 };
             });
 
@@ -125,8 +131,7 @@ const getProcessList = async () => {
         prevSystemTime = currentSystemTime;
 
         // Sort processes by memory usage and get top 20
-        const topProcesses = processes.sort((a, b) => b.memory - a.memory).slice(0, 20);
-        return topProcesses;
+        return processes.sort((a, b) => b.memory - a.memory).slice(0, 20);
     } catch (error) {
         print('Error getting process list:', error);
         return [];
