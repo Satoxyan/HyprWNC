@@ -40,7 +40,7 @@ const WifiNetwork = (accessPoint) => {
     return Button({
         onClicked: accessPoint.active ? () => { } : () => {
             connectAttempt = accessPoint.ssid;
-            networkAuthSSID.label = `Connecting to: ${connectAttempt}`;
+            networkAuthSSID.label = `${getString('Connecting to')}: ${connectAttempt}`;
 
             // Check if the SSID is stored
             execAsync(['nmcli', '-g', 'NAME', 'connection', 'show'])
@@ -134,16 +134,16 @@ const CurrentNetwork = () => {
             NetResource('arrow_cool_down', `${App.configDir}/scripts/network_scripts/network_bandwidth.py recv`),
         ]
     });
-    const networkStatus = Box({
-        children: [Label({
-            vpack: 'center',
-            className: 'txt-subtext',
-            setup: (self) => self.hook(Network, (self) => {
-                if (authLock) return;
-                self.label = Network.wifi.state;
-            }),
-        })]
-    });
+    // const networkStatus = Box({
+    //     children: [Label({
+    //         vpack: 'center',
+    //         className: 'txt-subtext',
+    //         setup: (self) => self.hook(Network, (self) => {
+    //             if (authLock) return;
+    //             self.label = Network.wifi.state;
+    //         }),
+    //     })]
+    // });
     networkAuthSSID = Label({
         className: 'margin-left-5',
         hpack: 'start',
@@ -152,7 +152,7 @@ const CurrentNetwork = () => {
     });
     const cancelAuthButton = Button({
         className: 'txt sidebar-wifinetworks-network-button',
-        label: 'Cancel',
+        label: getString('Cancel'),
         hpack: 'end',
         onClicked: () => {
             networkAuth.revealChild = false;
@@ -185,7 +185,7 @@ const CurrentNetwork = () => {
         revealChild: false,
         child: Label({
             className: 'txt txt-italic txt-subtext',
-            label: 'Authentication failed',
+            label: getString('Authentication failed'),
         }),
     })
     const authEntry = Entry({
@@ -211,7 +211,7 @@ const CurrentNetwork = () => {
                     authFailed.revealChild = true;
                 });
         },
-        placeholderText: 'Enter network password',
+        placeholderText: getString('Enter network password'),
     });
     const authBox = Box({
         className: 'spacing-h-5',
@@ -222,7 +222,7 @@ const CurrentNetwork = () => {
         ]
     });
     const forgetButton = Button({
-        label: 'Forget',
+        label: getString('Forget'),
         hexpand: true,
         className: 'txt sidebar-wifinetworks-network-button',
         onClicked: () => {
@@ -247,7 +247,7 @@ const CurrentNetwork = () => {
         setup: setupCursorHover,
     });
     const propertiesButton = Button({
-        label: 'Properties',
+        label: getString('Properties'),
         className: 'txt sidebar-wifinetworks-network-button',
         hexpand: true,
         onClicked: () => {
@@ -375,7 +375,7 @@ export default (props) => {
                         },
                     },
                     vertical: true,
-                    className: 'spacing-v-5 margin-bottom-15',
+                    className: 'spacing-v-5 sidebar-centermodules-scrollgradient-bottom-contentmargin',
                     setup: (self) => self.hook(Network, self.attribute.updateNetworks),
                 }),
             }),

@@ -5,10 +5,14 @@ import { MaterialIcon } from './materialicon.js';
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 const { Box, Button, Label, Revealer, SpinButton } = Widget;
 
+// Basically M3 Switch
+// https://m3.material.io/components/switch/overview
+// onReset must be async
 export const ConfigToggle = ({
     icon, name, desc = '', initValue,
-    expandWidget = true,
+    expandWidget = true, resetButton = false,
     onChange = () => { }, extraSetup = () => { },
+    onReset = () => { }, fetchValue = () => { },
     ...rest
 }) => {
     const enabled = Variable(initValue);
@@ -48,7 +52,7 @@ export const ConfigToggle = ({
     });
     const widgetContent = Box({
         tooltipText: desc,
-        className: 'txt spacing-h-5 configtoggle-box',
+        className: 'txt spacing-h-5',
         children: [
             ...(icon !== undefined ? [MaterialIcon(icon, 'norm')] : []),
             ...(name !== undefined ? [Label({
@@ -84,8 +88,24 @@ export const ConfigToggle = ({
         },
         ...rest,
     });
-    interactionWrapper.enabled = enabled;
-    return interactionWrapper;
+    const wholeThing = Box({
+        className: 'configtoggle-box spacing-h-5',
+        children: [
+            interactionWrapper,
+            ...(resetButton ? [Button({
+                className: 'configtoggle-reset',
+                onClicked: (self) => {
+                    onReset(self).then(() => {
+                        enabled.value = fetchValue();
+                    }).catch(print);
+                },
+                child: MaterialIcon('settings_backup_restore', 'small'),
+                setup: setupCursorHover,
+            })] : []),
+        ]
+    });
+    wholeThing.enabled = enabled;
+    return wholeThing;
 }
 
 export const ConfigSegmentedSelection = ({
@@ -187,16 +207,19 @@ export const ConfigGap = ({ vertical = true, size = 5, ...rest }) => Box({
 export const ConfigSpinButton = ({
     icon, name, desc = '', initValue,
     minValue = 0, maxValue = 100, step = 1,
-    expandWidget = true,
+    expandWidget = true, resetButton = false,
     onChange = () => { }, extraSetup = () => { },
+    onReset = () => { }, fetchValue = () => { },
     ...rest
 }) => {
+    let resetLock = false;
     const value = Variable(initValue);
     const spinButton = SpinButton({
         className: 'spinbutton',
         range: [minValue, maxValue],
         increments: [step, step],
         onValueChanged: ({ value: newValue }) => {
+            if (resetLock) return;
             value.value = newValue;
             onChange(spinButton, newValue);
         },
@@ -213,11 +236,26 @@ export const ConfigSpinButton = ({
             })] : []),
             ...(expandWidget ? [Box({ hexpand: true })] : []),
             spinButton,
+            ...(resetButton ? [Button({
+                className: 'spinbutton-reset',
+                onClicked: (self) => {
+                    onReset(self).then(() => {
+                        resetLock = true;
+                        const newValue = fetchValue();
+                        spinButton.value = newValue;
+                        value.value = newValue;
+                        resetLock = false;
+                    }).catch(print);
+                },
+                child: MaterialIcon('settings_backup_restore', 'small'),
+                setup: setupCursorHover,
+            })] : []),
         ],
         setup: (self) => {
             extraSetup(self);
         },
         ...rest,
     });
+    widgetContent.enabled = value;
     return widgetContent;
 }

@@ -112,7 +112,7 @@
  - [@sh1zicus](https://github.com/sh1zicus) for the wallpaper selector and much stuff i borrow from
  - [@Pharmaracist](https://github.com/Pharmaracist) for the task manager and much stuff i borrow from
  - [@midn8hustlr](https://github.com/midn8hustlr) for greatly improving the color generation system
- - AGS: [Aylur's config](https://github.com/Aylur/dotfiles), [kotontrion's config](https://github.com/kotontrion/dotfiles)
+ - AGS: [Aylur's config](https://github.com/Aylur/dotfiles/tree/ags-pre-ts), [kotontrion's config](https://github.com/kotontrion/dotfiles)
  - EWW: [fufexan's config](https://github.com/fufexan/dotfiles) (he thanks more people there btw)
  - AI bots for providing useful examples
 
