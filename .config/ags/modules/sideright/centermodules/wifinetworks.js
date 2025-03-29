@@ -99,6 +99,7 @@ const NetResource = (icon, command) => {
 }
 
 const CurrentNetwork = () => {
+    let passwordVisible = false;
     let authLock = false;
     let timeoutId = null;
 
@@ -175,11 +176,13 @@ const CurrentNetwork = () => {
         ]
     });
     const authVisible = Button({
+        vpack: 'center',
         child: MaterialIcon('visibility', 'large'),
         className: 'txt sidebar-wifinetworks-auth-visible',
-        onClicked: () => {
+        onClicked: (self) => {
             passwordVisible = !passwordVisible;
             authEntry.visibility = passwordVisible;
+            self.child.label = passwordVisible ? 'visibility_off' : 'visibility';
         },
         setup: setupCursorHover,
     });
@@ -218,8 +221,7 @@ const CurrentNetwork = () => {
         placeholderText: getString('Enter network password'),
     });
     const authBox = Box({
-        className: 'spacing-h-5',
-        vertical: false,
+        className: 'sidebar-wifinetworks-auth-box',
         children: [
             authEntry,
             authVisible,
