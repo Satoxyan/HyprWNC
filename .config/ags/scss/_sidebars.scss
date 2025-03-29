@@ -1017,15 +1017,18 @@ $waifu_image_overlay_transparency: 0.7;
 .sidebar-wifinetworks-auth-visible {
     @include element_decel;
     border-radius: 0px 12px 12px 0px;
-    background-color: $layer2Hover;
+    background-color: $layer3;
     color: $onLayer2;
     padding: 0.682rem;
     min-width: 0.918rem;
-}
 
-.sidebar-wifinetworks-auth-visible:hover,
-.sidebar-wifinetworks-auth-visible:focus {
-    background-color: $layer2Active;
+    &:hover,
+    &:focus {
+        background-color: $layer3Hover;
+    }
+    &:active {
+        background-color: $layer3Active;
+    }
 }
 
 .sidebar-wifinetworks-bandwidth {
@@ -1069,16 +1072,6 @@ $waifu_image_overlay_transparency: 0.7;
     color: $onLayer3;
     background-color: $layer3;
 
-<<<<<<< HEAD
-.sidebar-wifinetworks-network-button:hover,
-.sidebar-wifinetworks-network-button:focus {
-    background-color: $layer2Active;
-}
-
-.sidebar-margin-right-5{
-    margin-right: 5rem;
-}
-=======
     &:hover,
     &:focus {
         background-color: $layer3Hover;
@@ -1088,4 +1081,3 @@ $waifu_image_overlay_transparency: 0.7;
         background-color: $layer3Active;
     }
 }
->>>>>>> upstream/main
