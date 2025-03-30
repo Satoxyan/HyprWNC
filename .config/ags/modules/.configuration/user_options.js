@@ -110,7 +110,7 @@ let configOptions = {
             'saveInFolderByTags': false,
         },
         'pages': {
-            'order': ["apis", "tools"],
+            'order': ["apis", "tools", "github"],
             'apis': {
                 'order': ["gemini", "gpt", "waifu", "booru"],
             }

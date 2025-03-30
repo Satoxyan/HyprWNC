@@ -11,6 +11,7 @@ import apiWidgets from './apiwidgets.js';
 import { chatEntry } from './apiwidgets.js';
 import { TabContainer } from '../.commonwidgets/tabcontainer.js';
 import { checkKeybind } from '../.widgetutils/keybind.js';
+import githubWidget from './github.js';
 
 const SIDEBARTABS = {
     'apis': {
@@ -24,6 +25,12 @@ const SIDEBARTABS = {
         content: toolBox,
         materialIcon: 'home_repair_service',
         friendlyName: 'Tools',
+    },
+    'github': {
+        name: 'github',
+        content: githubWidget,
+        materialIcon: 'update',
+        friendlyName: 'Updates',
     },
 }
 const CONTENTS = userOptions.sidebar.pages.order.map((tabName) => SIDEBARTABS[tabName])
