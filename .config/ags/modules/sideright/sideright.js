@@ -68,7 +68,7 @@ const centerWidgets = [
         contentWidget: ModuleTaskManager,
     },
     {
-        name: getString('Live config'),
+        name: getString('Quick config'),
         materialIcon: 'tune',
         contentWidget: ModuleConfigure,
     },
