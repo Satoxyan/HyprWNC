@@ -218,7 +218,7 @@ export default (props) => {
             hpack: 'center',
             className: 'txt-small txt sidebar-centermodules-bottombar-button',
             onClicked: () => {
-                execAsync(['bash', '-c', userOptions.apps.audio]).catch(print);
+                execAsync(['bash', '-c', 'pavucontrol']).catch(print);
                 closeEverything();
             },
             label: getString('More'),
