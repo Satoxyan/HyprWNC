@@ -152,6 +152,20 @@ export default () => {
         className: 'task-manager-box spacing-v-5',
     });
 
+    const bottomBar = Box({
+        homogeneous: true,
+        children: [Button({
+            hpack: 'center',
+            className: 'txt-small txt sidebar-centermodules-bottombar-button',
+            onClicked: () => {
+                execAsync(['bash', '-c', userOptions.apps.taskManager]).catch(print);
+                closeEverything();
+            },
+            label: getString('More'),
+            setup: setupCursorHover,
+        })],
+    });
+    
     const widget = Box({
         vertical: true,
         className: 'task-manager-widget',
@@ -172,6 +186,7 @@ export default () => {
                         onClicked: updateProcessList,
                         setup: setupCursorHover,
                     }),
+                    bottomBar,
                 ],
             }),
             Scrollable({
