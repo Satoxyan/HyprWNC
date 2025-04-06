@@ -1,7 +1,7 @@
 {
   "No media": "بدون رسانه",
   "Powered by Google": "قدرت گرفته از گوگل",
-  "Uses gemini-pro.\nNot affiliated, endorsed, or sponsored by Google.\n\nPrivacy: Chat messages aren't linked to your account,\n    but will be read by human reviewers to improve the model.": "بکارگیری gemini-pro.بدون وابستگی تأیید شده یا حمایت شده توسط گوگل.\n\nحریم خصوصی: پیام‌های گفتگو به حساب شما مرتبط نیستند،\n    اما توسط بازبینی‌کنندگان انسانی برای بهبود مدل خوانده خواهند شد.",
+  "Not affiliated, endorsed, or sponsored by Google.\n\nPrivacy: Chat messages aren't linked to your account,\nbut will be read by human reviewers to improve the model.": "بدون وابستگی تأیید شده یا حمایت شده توسط گوگل.\n\nحریم خصوصی: پیام‌های گفتگو به حساب شما مرتبط نیستند،\nاما توسط بازبینی‌کنندگان انسانی برای بهبود مدل خوانده خواهند شد.",
   "Precise": "دقیق",
   "Balanced": "متعادل",
   "Creative": "خلاق",
@@ -35,8 +35,7 @@
   "Powered by yande.re and konachan": "قدرت گرفته از yande.re و konachan",
   "An image booru. May contain NSFW content.\nWatch your back.\n\nDisclaimer: Not affiliated with the provider\nnor responsible for any of its content.": "یک تصویر بورو. ممکن است محتوای NSFW داشته باشد.\nمواظب باشید.\n\nتوجه: بدون وابستگی به ارائه‌دهنده\nو مسئول هیچ‌یک از محتوای آن نیست.",
   "Lewds": "محتوای نامناسب",
-  "Shows naughty stuff when enabled.\nYa like those? Add this to user_options.js:\n\t'sidebar': {\n\t'image': {\n\t\t'allowNsfw': true,\n\t}\n}": "محتوای نامناسب را زمانی که فعال باشد نشان می‌دهد.\nآیا از اینها خوشتان می‌آید؟ این را به user_options.js اضافه کنید:\n\t'sidebar': {\n\t'image': {\n\t\t'allowNsfw': true,\n\t}\n}",
-  "Save in folder by tags": "نگه‌داری در پوشه بر اساس برچسب‌ها",
+  "Shows naughty stuff when enabled": "محتوای نامناسب را زمانی که فعال باشد نشان می‌دهد",
   "Saves images in folders by their tags": "تصاویر را در پوشه‌ها بر اساس برچسب‌هایشان نگه‌داری می‌کند",
   "Message Gemini...": "پیام به Gemini...",
   "Enter Google AI API Key...": "کلید API گوگل AI را وارد کنید...",
