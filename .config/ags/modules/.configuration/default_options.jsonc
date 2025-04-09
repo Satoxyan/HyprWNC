@@ -121,7 +121,8 @@
         "pages": {
             "order": [
                 "apis",
-                "tools"
+                "tools",
+                "github"
             ],
             "apis": {
                 "order": [
