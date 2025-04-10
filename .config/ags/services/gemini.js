@@ -62,6 +62,7 @@ class GeminiMessage extends Service {
 
     _role = '';
     _parts = [{ text: '' }];
+    _lastContentLength = 0;
     _thinking;
     _done = false;
     _rawData = '';
@@ -88,8 +89,11 @@ class GeminiMessage extends Service {
     }
     set content(content) {
         this._parts = [{ text: content }];
-        this.notify('content')
-        this.emit('changed')
+        if (content.length - this._lastContentLength >= userOptions.ai.charsEachUpdate) {
+            this.notify('content')
+            this.emit('changed')
+            this._lastContentLength = content.length;
+        }
     }
 
     get parts() { return this._parts }
@@ -280,7 +284,7 @@ class GeminiService extends Service {
     send(msg) {
         this._messages.push(new GeminiMessage('user', msg, false));
         this.emit('newMsg', this._messages.length - 1);
-        const aiResponse = new GeminiMessage('model', 'thinking...', true, false)
+        const aiResponse = new GeminiMessage('model', '', true, false)
 
         const body =
         {

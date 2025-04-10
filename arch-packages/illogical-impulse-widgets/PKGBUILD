@@ -12,7 +12,6 @@ depends=(
 	wlogout
 	wl-clipboard
 	hyprpicker
-	anyrun-git
 	cava
 	nm-connection-editor
 )

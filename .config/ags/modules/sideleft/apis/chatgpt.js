@@ -57,13 +57,20 @@ const ProviderSwitcher = () => {
             setup: setupCursorHover,
         });
     }
+    let indicatorIcon = Icon({
+        icon: GPTService.providers[GPTService._currentProvider]['logo_name'],
+        className: 'txt-large',
+        setup: (self) => self.hook(GPTService, (self) => {
+            self.icon = GPTService.providers[GPTService.providerID]['logo_name'];
+        }, 'providerChanged')
+    });
     const indicatorChevron = MaterialIcon('expand_more', 'norm');
     const indicatorButton = Button({
         tooltipText: getString('Select ChatGPT-compatible API provider'),
         child: Box({
             className: 'spacing-h-10 txt',
             children: [
-                MaterialIcon('cloud', 'norm'),
+                indicatorIcon,
                 Label({
                     hexpand: true,
                     xalign: 0,
@@ -142,7 +149,7 @@ const GPTInfo = () => {
                     Button({
                         className: 'txt-subtext txt-norm icon-material',
                         label: 'info',
-                        tooltipText: getString('Uses gpt-3.5-turbo.\nNot affiliated, endorsed, or sponsored by OpenAI.\n\nPrivacy: OpenAI claims they do not use your data\nwhen you use their API. Idk about others.'),
+                        tooltipText: getString("Chat with models compatible with OpenAI's Chat Completions API.\nNot affiliated, endorsed, or sponsored by any of the providers."),
                         setup: setupCursorHoverInfo,
                     }),
                 ]
@@ -209,7 +216,9 @@ export const OpenaiApiKeyInstructions = () => Box({
         transitionDuration: userOptions.animations.durationLarge,
         setup: (self) => self
             .hook(GPTService, (self, hasKey) => {
-                self.revealChild = (GPTService.key.length == 0);
+                self.revealChild = (
+                    GPTService.providers[GPTService.providerID]["requires_key"]
+                    && GPTService.key.length == 0);
             }, 'hasKey')
         ,
         child: Button({
@@ -232,7 +241,7 @@ const GPTWelcome = () => Box({
     vexpand: true,
     homogeneous: true,
     child: Box({
-        className: 'spacing-v-15',
+        className: 'spacing-v-15 margin-top-15 margin-bottom-15',
         vpack: 'center',
         vertical: true,
         children: [
@@ -252,6 +261,11 @@ export const chatContent = Box({
             if (!message) return;
             box.add(ChatMessage(message, `Model (${GPTService.providers[GPTService.providerID]['name']})`))
         }, 'newMsg')
+        .hook(GPTService, (self, hasKey) => {
+            self.revealChild = (
+                GPTService.providers[GPTService.providerID]["requires_key"]
+                && GPTService.key.length == 0);
+        }, 'providerChanged')
     ,
 });
 
@@ -284,9 +298,11 @@ export const chatGPTCommands = Box({
 export const sendMessage = (text) => {
     // Check if text or API key is empty
     if (text.length == 0) return;
-    if (GPTService.key.length == 0) {
+    if (GPTService.providers[GPTService.providerID]["requires_key"]
+        && GPTService.key.length == 0
+        && !text.startsWith('/key')) {
         GPTService.key = text;
-        chatContent.add(SystemMessage(`Key saved to\n\`${GPTService.keyPath}\``, 'API Key', ChatGPTView));
+        chatContent.add(SystemMessage(`Key saved to \`${GPTService.keyPath}\`\nUpdate anytime with \`/key YOUR_API_KEY\`.`, 'API Key', ChatGPTView));
         text = '';
         return;
     }

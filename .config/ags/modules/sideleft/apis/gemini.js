@@ -166,7 +166,7 @@ const geminiWelcome = Box({
     vexpand: true,
     homogeneous: true,
     child: Box({
-        className: 'spacing-v-15',
+        className: 'spacing-v-15 margin-top-15 margin-bottom-15',
         vpack: 'center',
         vertical: true,
         children: [
@@ -220,7 +220,7 @@ export const sendMessage = (text) => {
     if (text.length == 0) return;
     if (GeminiService.key.length == 0) {
         GeminiService.key = text;
-        chatContent.add(SystemMessage(`Key saved to\n\`${GeminiService.keyPath}\``, 'API Key', GeminiView));
+        chatContent.add(SystemMessage(`Key saved to \`${GeminiService.keyPath}\`\nUpdate anytime with /key YOUR_API_KEY.`, 'API Key', GeminiView));
         text = '';
         return;
     }
