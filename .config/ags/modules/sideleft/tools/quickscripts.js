@@ -44,13 +44,13 @@ const scripts = [
     {
         icon: 'arch-symbolic',
         name: getString('Update packages'),
-        command: `sudo pacman -Syyu`,
+        command: `yay -Syyu`,
         enabled: isArchDistro,
     },
     {
         icon: 'arch-symbolic',
         name: getString('Remove orphan packages'),
-        command: `sudo pacman -R (pacman -Qdtq)`,
+        command: `yay -R (pacman -Qdtq)`,
         enabled: isArchDistro,
     },
     {
