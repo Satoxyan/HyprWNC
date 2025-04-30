@@ -1,6 +1,6 @@
 pkgname=illogical-impulse-oneui4-icons-git
 _pkgname=OneUI4-Icons
-pkgver=r70.55eada4
+pkgver=r71.693095d
 pkgrel=1
 pkgdesc="A fork of mjkim0727/OneUI4-Icons for illogical-impulse dotfiles."
 arch=('x86_64')
