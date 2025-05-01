@@ -101,7 +101,10 @@ _<sup>You can also drag and drop windows across workspaces</sup>_
 _<sup>Get yande.re and konachan images from sidebar</sup>_
 
 ### Kando widget for app shortcut
-![image](assets/sample.gif) <br>
+<p align="center">
+  <img src="assets/sample.gif" width="1200">
+</p>
+
 _<sup>Get faster for opening app, not just by keyboard, but also by mouse!</sup>_
 
 <div align="center">
