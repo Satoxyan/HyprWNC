@@ -210,4 +210,10 @@ apply_fuzzel &
 apply_term &
 
 #Executing lockcolor.sh on exit
-trap '$HOME/.config/ags/scripts/color_generation/lockcolor.sh && $HOME/.config/ags/scripts/color_generation/cavacolor.sh' EXIT
+cleanup() {
+    "$HOME/.config/ags/scripts/color_generation/lockcolor.sh"
+    "$HOME/.config/ags/scripts/color_generation/cavacolor.sh"
+    "$HOME/.config/ags/scripts/color_generation/kandocolor.sh"
+}
+
+trap cleanup EXIT
