@@ -78,6 +78,7 @@
 
 **Dynamic color lockscreen**
 ![vlcsnap-2025-03-26-13h36m35s329](https://github.com/user-attachments/assets/c5244219-538d-4d43-a895-998f54764f39)
+_<sup>Idle with style</sup>_
 
 ### AI
 ![image](https://github.com/user-attachments/assets/9d7af13f-89ef-470d-ba78-d2288b79cf60)
@@ -85,6 +86,7 @@ _<sup>Sidebar offers online and offline chat. Text selection summary is offline 
 
 **Wallpaper selector, task manager, dynamic cava color**
 ![Pasted image (5)](https://github.com/user-attachments/assets/bb3524cb-2014-4079-a3f7-a786e714f428)
+_<sup>Get comfortable while choosing your wallpaper</sup>_
 
 **Fancy notifications, music controls, system, calendar**
 ![image](https://github.com/end-4/dots-hyprland/assets/97237370/406b72b6-fa38-4f0d-a6c4-4d7d5d5ddcb7)
@@ -98,11 +100,9 @@ _<sup>You can also drag and drop windows across workspaces</sup>_
 ![image](https://github.com/user-attachments/assets/bbb332ec-962a-4e88-a95b-486d0bd8ce76)
 _<sup>Get yande.re and konachan images from sidebar</sup>_
 
-## Unsupported stuff
-
-**Easy window management**
-<!--! ![image](https://github.com/end-4/dots-hyprland/assets/97237370/354431f6-8939-487f-9292-0bac71cf9ca8) -->
-![image](https://github.com/end-4/dots-hyprland/assets/97237370/14e9725c-789f-4412-87b6-cce9504db109)
+### Kando widget for app shortcut
+![image](assets/sample.gif) <br>
+_<sup>Get faster for opening app, not just by keyboard, but also by mouse!</sup>_
 
 <div align="center">
     <h2>• thank you •</h2>
