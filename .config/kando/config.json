@@ -1,0 +1,54 @@
+{
+  "locale": "auto",
+  "menuTheme": "default",
+  "darkMenuTheme": "default",
+  "menuThemeColors": {
+    "neon-lights": {
+      "glow-color": "rgba(255, 179, 179, 1)",
+      "connector-color": "rgba(253, 255, 240, 0.57)"
+    },
+    "clean-circle": {
+      "action-icon-color": "rgba(255, 200, 225, 1)",
+      "background-color": "rgba(24, 28, 32, 1)",
+      "text-color": "rgba(156, 203, 251, 1)",
+      "submenu-icon-color": "rgba(51, 51, 51, 1)"
+    },
+    "default": {
+      "border-color": "rgba(16, 20, 24, 1)",
+      "text-color": "rgba(156, 203, 251, 1)",
+      "hover-color": "rgba(24, 28, 32, 1)",
+      "background-color": "rgba(24, 28, 32, 1)"
+    }
+  },
+  "darkMenuThemeColors": {},
+  "enableDarkModeForMenuThemes": false,
+  "soundTheme": "none",
+  "soundVolume": 0.5,
+  "sidebarVisible": false,
+  "ignoreWriteProtectedConfigFiles": false,
+  "trayIconFlavor": "color",
+  "enableVersionCheck": true,
+  "zoomFactor": 1,
+  "menuOptions": {
+    "centerDeadZone": 50,
+    "minParentDistance": 150,
+    "dragThreshold": 15,
+    "fadeInDuration": 150,
+    "fadeOutDuration": 200,
+    "enableMarkingMode": true,
+    "enableTurboMode": true,
+    "hoverModeNeedsConfirmation": false,
+    "gestureMinStrokeLength": 150,
+    "gestureMinStrokeAngle": 20,
+    "gestureJitterThreshold": 10,
+    "gesturePauseTimeout": 100,
+    "fixedStrokeLength": 0,
+    "rmbSelectsParent": false,
+    "gamepadBackButton": 1,
+    "gamepadCloseButton": 2
+  },
+  "editorOptions": {
+    "showSidebarButtonVisible": true,
+    "showEditorButtonVisible": true
+  }
+}

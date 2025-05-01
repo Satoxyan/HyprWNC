@@ -15,5 +15,12 @@
 // "workspaces": {"shown": 8 }
 //
 {
-    
+    "sidebar": {
+        "pages": {
+            "apis": {
+                "defaultPage": "gpt"
+            },
+            "defaultPage": "apis"
+        }
+    }
 }
