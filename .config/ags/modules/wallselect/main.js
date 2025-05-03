@@ -12,9 +12,8 @@ let isLoading = false;
 // Constants
 const THUMBNAIL_DIR = GLib.build_filenamev([
     GLib.get_home_dir(),
-    "Pictures",
-    "Wallpapers",
-    "thumbnails",
+    ".cache",
+    "wallpapers",
 ]);
 const WALLPAPER_DIR = GLib.build_filenamev([
     GLib.get_home_dir(),
@@ -44,7 +43,9 @@ const WallpaperButton = (path) =>
         onClicked: () => {
             Utils.execAsync(
                 `sh ${GLib.get_home_dir()}/.config/ags/scripts/color_generation/switchwall.sh "${path.replace(
-                    "thumbnails",
+                    "$HOME",
+                    ".cache",
+                    "wallpapers",
                     "",
                 )}"`,
             );
