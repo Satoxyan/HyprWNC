@@ -3,7 +3,7 @@ set -e  # Exit on errors
 set -u  # Treat unset variables as errors
 
 # Paths configuration
-THUMBNAIL_DIR="$HOME/Pictures/Wallpapers/thumbnails"
+THUMBNAIL_DIR="$HOME/.cache/wallpapers/"
 WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
 
 # Ensure the thumbnail directory exists
@@ -11,18 +11,25 @@ mkdir -p "$THUMBNAIL_DIR"
 
 # Loop through valid image files including GIFs
 for image in "$WALLPAPER_DIR"/*.{jpg,JPG,jpeg,JPEG,png,PNG,gif,GIF}; do
-    # Check if the file exists (handles the case where no files match the pattern)
     [ -e "$image" ] || continue
 
     filename=$(basename "$image")
+    thumbnail="$THUMBNAIL_DIR/$filename"
 
-    # If the image is a GIF, extract the first frame
+    # Skip if thumbnail already exists
+    if [[ -f "$thumbnail" ]]; then
+        echo "Skip: Thumbnail already exists for $filename"
+        continue
+    fi
+
+    echo "Generating thumbnail for $filename..."
+
     if [[ "$image" =~ \.gif$|\.GIF$ ]]; then
-        # Extract the first frame and create a thumbnail
-        magick "$image[0]" -resize 150x90^ -gravity center -extent 150x90 "$THUMBNAIL_DIR/$filename"
+        # Extract first frame of GIF
+        magick "$image[0]" -resize 150x90^ -gravity center -extent 150x90 "$thumbnail"
     else
-        # For non-GIF images, just create a thumbnail
-        magick "$image" -resize 150x90^ -gravity center -extent 150x90 "$THUMBNAIL_DIR/$filename"
+        # Other images
+        magick "$image" -resize 150x90^ -gravity center -extent 150x90 "$thumbnail"
     fi
 done
 

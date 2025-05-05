@@ -1,6 +1,7 @@
 import Widget from "resource:///com/github/Aylur/ags/widget.js";
 import * as Utils from "resource:///com/github/Aylur/ags/utils.js";
 import App from "resource:///com/github/Aylur/ags/app.js";
+import clickCloseRegion from '../.commonwidgets/clickcloseregion.js';
 const { GLib } = imports.gi;
 const { Box, EventBox, Scrollable, Label } = Widget;
 
@@ -12,9 +13,8 @@ let isLoading = false;
 // Constants
 const THUMBNAIL_DIR = GLib.build_filenamev([
     GLib.get_home_dir(),
-    "Pictures",
-    "Wallpapers",
-    "thumbnails",
+    ".cache",
+    "wallpapers",
 ]);
 const WALLPAPER_DIR = GLib.build_filenamev([
     GLib.get_home_dir(),
@@ -35,22 +35,25 @@ const getBarPosition = () => {
 };
 
 // Wallpaper Button
-const WallpaperButton = (path) =>
-    Widget.Button({
+const WallpaperButton = (thumbnailPath) => {
+    const wallpaperPath = GLib.build_filenamev([
+        WALLPAPER_DIR,
+        GLib.path_get_basename(thumbnailPath), // Ambil nama file dari thumbnail
+    ]);
+
+    return Widget.Button({
         child: Box({
             className: "preview-box",
-            css: `background-image: url("${path}");`,
+            css: `background-image: url("${thumbnailPath}");`,
         }),
         onClicked: () => {
             Utils.execAsync(
-                `sh ${GLib.get_home_dir()}/.config/ags/scripts/color_generation/switchwall.sh "${path.replace(
-                    "thumbnails",
-                    "",
-                )}"`,
+                `sh ${GLib.get_home_dir()}/.config/ags/scripts/color_generation/switchwall.sh "${wallpaperPath}"`,
             );
             App.closeWindow("wallselect");
         },
     });
+};
 
 // Get Wallpaper Paths
 const getWallpaperPaths = async () => {
@@ -260,6 +263,7 @@ export default () =>
                         }),
                     ],
                 }),
+                clickCloseRegion({ name: 'wallselect', multimonitor: false, fillMonitor: 'vertical' })
             ],
         }),
     });
