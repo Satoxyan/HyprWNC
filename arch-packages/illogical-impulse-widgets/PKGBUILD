@@ -15,4 +15,5 @@ depends=(
 	cava
 	nm-connection-editor
 	kando-bin
+	better-control-git
 )
