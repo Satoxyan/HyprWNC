@@ -140,13 +140,8 @@ switch() {
 			sleep 0.1
 		done
 
-<<<<<<< HEAD
 		# We take the first frame of video to colorgen
 		thumbnail="$THUMBNAIL_DIR/wall.jpg"
-=======
-		# We take the first frame of video to colorgen and swww
-		thumbnail="$CACHE_DIR"/user/generated/mpvpaper_thumbnail.jpg
->>>>>>> 13cb540e (Update switchwall.sh)
 		ffmpeg -y -i "$imgpath" -vframes 1 "$thumbnail" 2>/dev/null
 
 
