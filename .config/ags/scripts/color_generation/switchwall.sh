@@ -56,113 +56,79 @@ EOF
 }
 
 switch() {
-	imgpath=$1
-	read scale screenx screeny screensizey < <(hyprctl monitors -j | jq '.[] | select(.focused) | .scale, .x, .y, .height' | xargs)
-	cursorposx=$(hyprctl cursorpos -j | jq '.x' 2>/dev/null) || cursorposx=960
-	cursorposx=$(bc <<< "scale=0; ($cursorposx - $screenx) * $scale / 1")
-	cursorposy=$(hyprctl cursorpos -j | jq '.y' 2>/dev/null) || cursorposy=540
-	cursorposy=$(bc <<< "scale=0; ($cursorposy - $screeny) * $scale / 1")
-	cursorposy_inverted=$((screensizey - cursorposy))
+    imgpath=$1
+    read scale screenx screeny screensizey < <(hyprctl monitors -j | jq '.[] | select(.focused) | .scale, .x, .y, .height' | xargs)
+    cursorposx=$(hyprctl cursorpos -j | jq '.x' 2>/dev/null) || cursorposx=960
+    cursorposx=$(bc <<< "scale=0; ($cursorposx - $screenx) * $scale / 1")
+    cursorposy=$(hyprctl cursorpos -j | jq '.y' 2>/dev/null) || cursorposy=540
+    cursorposy=$(bc <<< "scale=0; ($cursorposy - $screeny) * $scale / 1")
+    cursorposy_inverted=$((screensizey - cursorposy))
 
-	if [ "$imgpath" == '' ]; then
-		echo 'Aborted'
-		exit 0
-	fi
-
-	mkdir -p "$THUMBNAIL_DIR"
-	rm -f "$THUMBNAIL_DIR"/wall.*
-	
-	# Dapatkan ekstensi asli file (jpg, png, dll.)
-    ext="${imgpath##*.}"
-
-    # Pastikan ekstensi dalam huruf kecil
-    ext=$(echo "$ext" | tr '[:upper:]' '[:lower:]')
-
-    # Jika ekstensi kosong atau tidak valid, gunakan default jpg
-    if [[ -z "$ext" || ! "$ext" =~ ^(jpg|jpeg|png|bmp|webp)$ ]]; then
-        ext="jpg"
+    if [ "$imgpath" == '' ]; then
+        echo 'Aborted'
+        exit 0
     fi
 
-    # Simpan gambar dengan nama sesuai format
-	if is_video "$imgpath"; then
-		# Simpan thumbnail hasil ffmpeg ke wall.jpg
-		thumbnail="$THUMBNAIL_DIR/wall.jpg"
-		ffmpeg -y -i "$imgpath" -vframes 1 "$thumbnail" 2>/dev/null
+    mkdir -p "$THUMBNAIL_DIR"
+    rm -f "$THUMBNAIL_DIR"/wall.*
+
+    # --- Pindahkan kill_existing_mpvpaper ke sini ---
+    kill_existing_mpvpaper
+
+    # Dapatkan ekstensi asli file (jpg, png, dll.)
+    ext="${imgpath##*.}"
+    ext=$(echo "$ext" | tr '[:upper:]' '[:lower:]')
+    [[ -z "$ext" || ! "$ext" =~ ^(jpg|jpeg|png|bmp|webp)$ ]] && ext="jpg"
+
+    if is_video "$imgpath"; then
+        missing_deps=()
+        if ! command -v mpvpaper &> /dev/null; then
+            missing_deps+=("mpvpaper")
+        fi
+        if ! command -v ffmpeg &> /dev/null; then
+            missing_deps+=("ffmpeg")
+        fi
+        if [ ${#missing_deps[@]} -gt 0 ]; then
+            echo "Missing deps: ${missing_deps[*]}"
+            echo "Arch: "
+            echo "	yay -S ${missing_deps[*]}"
+            exit 0
+        fi
+
+        local video_path=$1
+
+        # Ambil thumbnail
+        thumbnail="$THUMBNAIL_DIR/wall.jpg"
+        ffmpeg -y -i "$imgpath" -vframes 1 "$thumbnail" 2>/dev/null
+
+        # Jalankan mpvpaper setelah transisi
+        monitors=$(hyprctl monitors -j | jq -r '.[] | .name')
+        for monitor in $monitors; do
+            mpvpaper -o "$VIDEO_OPTS" "$monitor" "$video_path" &
+			sleep 1
+        done
 
 		if [ -f "$thumbnail" ]; then
-			ln -sf "$thumbnail" "$THUMBNAIL_DIR/wallpaper"
-		fi
-	else
-		# Salin gambar ke wall.jpg lalu buat symlink
-		ext="${imgpath##*.}"
-		ext=$(echo "$ext" | tr '[:upper:]' '[:lower:]')
-		[[ -z "$ext" || ! "$ext" =~ ^(jpg|jpeg|png|bmp|webp)$ ]] && ext="jpg"
+            ln -sf "$thumbnail" "$THUMBNAIL_DIR/wallpaper"
+            swww img "$thumbnail" --transition-step 100 --transition-fps 120 \
+                --transition-type grow --transition-angle 30 --transition-duration 1 \
+                --transition-pos "$cursorposx, $cursorposy_inverted"
+            "$CONFIG_DIR"/scripts/color_generation/colorgen.sh "$thumbnail" --apply --smart
+            create_restore_script "$video_path"
+        else
+            echo "Cannot create image to colorgen"
+        fi
 
-		CACHE_FILE="$THUMBNAIL_DIR/wall.jpg"
-		cp "$imgpath" "$CACHE_FILE"
-		ln -sf "$CACHE_FILE" "$THUMBNAIL_DIR/wallpaper"
-	fi
-
-
-	# ags run-js "wallpaper.set('')"
-	# sleep 0.1 && ags run-js "wallpaper.set('${imgpath}')" &
-	swww img "$imgpath" --transition-step 100 --transition-fps 144 \
-		--transition-type grow --transition-angle 30 --transition-duration 1 \
-		--transition-pos "$cursorposx, $cursorposy_inverted"
-	kill_existing_mpvpaper
-
-	if is_video "$imgpath"; then
-		missing_deps=()
-		if ! command -v mpvpaper &> /dev/null; then
-			missing_deps+=("mpvpaper")
-		fi
-
-		if ! command -v ffmpeg &> /dev/null; then
-			missing_deps+=("ffmpeg")
-		fi
-
-		if [ ${#missing_deps[@]} -gt 0 ]; then
-			echo "Missing deps: ${missing_deps[*]}"
-			echo "Arch: "
-			echo "	yay -S ${missing_deps[*]}"
-			exit 0
-		fi
-
-		local video_path=$1
-		
-		monitors=$(hyprctl monitors -j | jq -r '.[] | .name')
-
-		for monitor in $monitors; do
-			mpvpaper -o "$VIDEO_OPTS" "$monitor" "$video_path" &
-			sleep 0.1
-		done
-
-		# We take the first frame of video to colorgen
-		thumbnail="$THUMBNAIL_DIR/wall.jpg"
-		ffmpeg -y -i "$imgpath" -vframes 1 "$thumbnail" 2>/dev/null
-
-
-		if [ -f "$thumbnail" ]; then
-			# Apply swww wallpaper using the thumbnail
-			swww img "$thumbnail" --transition-step 100 --transition-fps 120 \
-				--transition-type grow --transition-angle 30 --transition-duration 1 \
-				--transition-pos "$cursorposx, $cursorposy_inverted"
-			"$CONFIG_DIR"/scripts/color_generation/colorgen.sh "$thumbnail" --apply --smart
-
-			create_restore_script "$video_path" 
-		else
-			echo "Cannot create image to colorgen"
-		fi
-	else
-		# agsv1 run-js "wallpaper.set('')"
-		# sleep 0.1 && agsv1 run-js "wallpaper.set('${imgpath}')" &
-		swww img "$imgpath" --transition-step 100 --transition-fps 120 \
-			--transition-type grow --transition-angle 30 --transition-duration 1 \
-			--transition-pos "$cursorposx, $cursorposy_inverted"
-
-		"$CONFIG_DIR"/scripts/color_generation/colorgen.sh "$imgpath" --apply --smart
-		remove_restore
-	fi
+    else
+        CACHE_FILE="$THUMBNAIL_DIR/wall.jpg"
+        cp "$imgpath" "$CACHE_FILE"
+        ln -sf "$CACHE_FILE" "$THUMBNAIL_DIR/wallpaper"
+        swww img "$imgpath" --transition-step 100 --transition-fps 120 \
+            --transition-type grow --transition-angle 30 --transition-duration 1 \
+            --transition-pos "$cursorposx, $cursorposy_inverted"
+        "$CONFIG_DIR"/scripts/color_generation/colorgen.sh "$imgpath" --apply --smart
+        remove_restore
+    fi
 }
 
 if [ "$1" == "--noswitch" ]; then
