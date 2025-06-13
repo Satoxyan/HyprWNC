@@ -8,6 +8,13 @@ CACHE_DIR="$HOME/.cache/swww"
 CACHE_FILE="$CACHE_DIR/wall.$ext"
 WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
 
+#Transition variables
+TRAN_TYPE="wipe"
+TRAN_STEP="5"
+TRAN_ANGLE="30"
+FRAME="144"
+DURATION="1.0"
+
 switch() {
 	imgpath=$1
 	read scale screenx screeny screensizey < <(hyprctl monitors -j | jq '.[] | select(.focused) | .scale, .x, .y, .height' | xargs)
@@ -43,8 +50,8 @@ switch() {
 	
 	ln -sf "$CACHE_FILE" "$CACHE_DIR/wallpaper"
 
-	swww img "$imgpath" --transition-step 100 --transition-fps 144 \
-		--transition-type outer --transition-angle 30 --transition-duration 1 \
+	swww img "$imgpath" --transition-step $TRAN_STEP --transition-fps $FRAME \
+		--transition-type $TRAN_TYPE --transition-angle $TRAN_ANGLE --transition-duration $DURATION \
 		--transition-pos "$cursorposx, $cursorposy_inverted"
 }
 

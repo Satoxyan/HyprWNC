@@ -12,6 +12,14 @@ CUSTOM_DIR="$XDG_CONFIG_HOME/hypr/custom"
 RESTORE_SCRIPT_DIR="$CUSTOM_DIR/scripts"
 RESTORE_SCRIPT="$RESTORE_SCRIPT_DIR/__restore_video_wallpaper.sh"
 
+#Transition variables
+TRAN_TYPE="grow"
+TRAN_STEP="5"
+TRAN_ANGLE="0"
+FRAME="144"
+DURATION="1.0"
+
+# Video options for mpvpaper
 VIDEO_OPTS="no-audio loop hwdec=auto scale=bilinear interpolation=no video-sync=display-resample panscan=1.0 video-scale-x=1.0 video-scale-y=1.0 video-align-x=0.5 video-align-y=0.5"
 
 mkdir -p "$RESTORE_SCRIPT_DIR"
@@ -110,8 +118,8 @@ switch() {
 
 		if [ -f "$thumbnail" ]; then
             ln -sf "$thumbnail" "$THUMBNAIL_DIR/wallpaper"
-            swww img "$thumbnail" --transition-step 100 --transition-fps 120 \
-                --transition-type grow --transition-angle 30 --transition-duration 1 \
+            swww img "$thumbnail" --transition-step $TRAN_STEP --transition-fps $FRAME \
+                --transition-type $TRAN_TYPE --transition-angle $TRAN_ANGLE --transition-duration $DURATION \
                 --transition-pos "$cursorposx, $cursorposy_inverted"
             "$CONFIG_DIR"/scripts/color_generation/colorgen.sh "$thumbnail" --apply --smart
             create_restore_script "$video_path"
@@ -123,8 +131,8 @@ switch() {
         CACHE_FILE="$THUMBNAIL_DIR/wall.jpg"
         cp "$imgpath" "$CACHE_FILE"
         ln -sf "$CACHE_FILE" "$THUMBNAIL_DIR/wallpaper"
-        swww img "$imgpath" --transition-step 100 --transition-fps 120 \
-            --transition-type grow --transition-angle 30 --transition-duration 1 \
+        swww img "$imgpath" --transition-step $TRAN_STEP --transition-fps $FRAME \
+            --transition-type $TRAN_TYPE --transition-angle $TRAN_ANGLE --transition-duration $DURATION \
             --transition-pos "$cursorposx, $cursorposy_inverted"
         "$CONFIG_DIR"/scripts/color_generation/colorgen.sh "$imgpath" --apply --smart
         remove_restore
