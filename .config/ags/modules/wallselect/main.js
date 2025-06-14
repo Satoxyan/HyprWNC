@@ -253,9 +253,24 @@ export default () =>
                                     App,
                                     async (_, name, visible) => {
                                         if (name === "wallselect" && visible) {
-                                            const content =
-                                                await createContent();
-                                            self.children = [content];
+                                            // Jalankan generate thumbnails saat window dibuka
+                                            try {
+                                                await Utils.execAsync([
+                                                    'bash',
+                                                    `${GLib.get_home_dir()}/.config/ags/scripts/generate_thumbnails.sh`
+                                                ]);
+                                                // Reset cache dan muat ulang konten
+                                                cachedContent = null;
+                                                wallpaperPaths = [];
+                                                visiblePaths = [];
+                                                const content = await createContent();
+                                                self.children = [content];
+                                            } catch (error) {
+                                                console.error("Error generating thumbnails:", error);
+                                                // Tetap tampilkan konten meski ada error
+                                                const content = await createContent();
+                                                self.children = [content];
+                                            }
                                         }
                                     },
                                     "window-toggled",
