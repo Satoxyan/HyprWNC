@@ -51,6 +51,10 @@ const overviewContent = await OptionalOverview();
 export const SearchAndWindows = () => {
     var _appSearchResults = [];
 
+    const refreshApplications = () => {
+        Applications.reload(); // Memaksa reload daftar aplikasi
+        _appSearchResults = []; // Reset hasil pencarian
+    };
     const resultsBox = Widget.Box({
         className: 'overview-search-results',
         vertical: true,
@@ -181,9 +185,14 @@ export const SearchAndWindows = () => {
         ],
         setup: (self) => self
             .hook(App, (_b, name, visible) => {
-                if (name == 'overview' && !visible) {
-                    resultsBox.children = [];
-                    entry.set_text('');
+                if (name == 'overview') {
+                    if (visible) {
+                        // Refresh aplikasi saat overview dibuka
+                        refreshApplications();
+                    } else {
+                        resultsBox.children = [];
+                        entry.set_text('');
+                    }
                 }
             })
             .on('key-press-event', (widget, event) => { // Typing
