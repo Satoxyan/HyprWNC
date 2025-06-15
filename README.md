@@ -1,6 +1,6 @@
 <div align="center">
     <h1>【 HyprWNC 】</h1>
-    <h3>cause i know that "Windows Never Could"</h3>
+    <h2>Intend to maintain end-4 deprecated AGS dots</h2>
 </div>
 
 <div align="center"> 
@@ -38,7 +38,7 @@
 
    If you are using fish shell (non-posix-compliant shell) then:
    ```bash
-   bash -c "$(curl -s https://end-4.github.io/dots-hyprland-wiki/setup.sh)"
+   bash -c "$(https://raw.githubusercontent.com/Satoxyan/HyprWNC/refs/heads/main/setup.sh)"
    ```
 
    - **Manual** installation, other distros and more:
@@ -71,21 +71,7 @@
 
 <details> 
   <summary>Help improve these dotfiles</summary>
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-   - Try the Quickshell-powered version at [`ii-qs` branch](https://github.com/end-4/dots-hyprland/tree/ii-qs) - It comes with major improvements, and you're free to make suggestions 👉 [#1276](https://github.com/end-4/dots-hyprland/pull/1276)
-=======
-   - New: Try the Quickshell-powered version at [`ii-qs` branch](https://github.com/end-4/dots-hyprland/tree/ii-qs) - It comes with major improvements, and you're free to make suggestions 👉 [#1276](https://github.com/end-4/dots-hyprland/pull/1276)
->>>>>>> e08230cf (readme: more emphasis on new quickshell version and less on reporting issues with ags version)
-=======
-   - Try the Quickshell-powered version at [`ii-qs` branch](https://github.com/end-4/dots-hyprland/tree/ii-qs) - It comes with major improvements, and you're free to make suggestions 👉 [#1276](https://github.com/end-4/dots-hyprland/pull/1276)
->>>>>>> ea8f06b6 (Update README.md)
-=======
-   - You can give feedback/suggestions for the [`ii-qs` branch](https://github.com/end-4/dots-hyprland/tree/ii-qs) in [#1276](https://github.com/end-4/dots-hyprland/pull/1276)
->>>>>>> upstream/main
-   
+    - by contributing and open an issues!
 </details>
 
 <div align="center">
