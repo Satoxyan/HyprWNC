@@ -83,8 +83,6 @@
 ![vlcsnap-2025-03-26-13h36m35s329](https://github.com/user-attachments/assets/c5244219-538d-4d43-a895-998f54764f39)
 _<sup>Idle with style</sup>_
 
-**Note**: Expect minimal maintenance for the main branch, as I'm already working on and using the new Quickshell version of illogical-impulse at the ii-qs branch. See [#1276](https://github.com/end-4/dots-hyprland/pull/1276).
-
 ### AI
 ![image](https://github.com/user-attachments/assets/9d7af13f-89ef-470d-ba78-d2288b79cf60)
 _<sup>Sidebar offers online and offline chat. Text selection summary is offline only for privacy.</sup>_
