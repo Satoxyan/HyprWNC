@@ -5,9 +5,9 @@
 
 <div align="center"> 
 
-![](https://img.shields.io/github/last-commit/Satoxyan/dots-hyprland-fork?&style=for-the-badge&color=FFB1C8&logoColor=D9E0EE&labelColor=292324)
-![](https://img.shields.io/github/stars/Satoxyan/dots-hyprland-fork?style=for-the-badge&logo=andela&color=FFB686&logoColor=D9E0EE&labelColor=292324)
-[![](https://img.shields.io/github/repo-size/Satoxyan/dots-hyprland-fork?color=CAC992&label=SIZE&logo=googledrive&style=for-the-badge&logoColor=D9E0EE&labelColor=292324)](https://github.com/end-4/hyprland)
+![](https://img.shields.io/github/last-commit/Satoxyan/HyprWNC?&style=for-the-badge&color=FFB1C8&logoColor=D9E0EE&labelColor=292324)
+![](https://img.shields.io/github/stars/Satoxyan/HyprWNC?style=for-the-badge&logo=andela&color=FFB686&logoColor=D9E0EE&labelColor=292324)
+[![](https://img.shields.io/github/repo-size/Satoxyan/HyprWNC?color=CAC992&label=SIZE&logo=googledrive&style=for-the-badge&logoColor=D9E0EE&labelColor=292324)](https://github.com/end-4/hyprland)
 ![](https://img.shields.io/badge/issues-skill-green?style=for-the-badge&color=CCE8E9&logoColor=D9E0EE&labelColor=292324) 
 </a>
 
