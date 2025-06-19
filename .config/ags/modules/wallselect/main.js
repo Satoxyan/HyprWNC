@@ -290,13 +290,6 @@ export default () =>
                     className: "sidebar-right spacing-v-15",
                     children: [
                         Box({
-                            className: "wallselect-header",
-                            children: [
-                                Box({ hexpand: true }), // Пустое пространство для выравнивания
-                                GenerateButton(),
-                            ],
-                        }),
-                        Box({
                             vertical: true,
                             className: "sidebar-module",
                             setup: (self) =>
