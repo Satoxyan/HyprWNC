@@ -142,6 +142,49 @@ const createPlaceholder = () => Box({
     ],
 });
 
+const SliderControls = (scrollable) => {
+    const positionIndicator = Widget.Label({
+        className: 'wall-position-indicator',
+        label: '1/1'
+    });
+    
+    const updateIndicator = () => {
+        const adj = scrollable.get_hadjustment();
+        const current = Math.round(adj.get_value() / adj.get_page_size()) + 1;
+        const total = Math.ceil(adj.get_upper() / adj.get_page_size());
+        positionIndicator.label = `${current}/${total}`;
+    };
+    
+    scrollable.get_hadjustment().connect('value-changed', updateIndicator);
+    
+    return Widget.Box({
+        className: 'slider-controls',
+        hpack: 'center',
+        spacing: 10,
+        children: [
+            Widget.Button({
+                className: 'slider-btn left',
+                child: Widget.Icon({ icon: 'pan-start-symbolic', size: 24 }),
+                onClicked: () => {
+                    const adj = scrollable.get_hadjustment();
+                    adj.set_value(Math.max(0, adj.get_value() - adj.get_page_size()));
+                    updateIndicator();
+                }
+            }),
+            positionIndicator,
+            Widget.Button({
+                className: 'slider-btn right',
+                child: Widget.Icon({ icon: 'pan-end-symbolic', size: 24 }),
+                onClicked: () => {
+                    const adj = scrollable.get_hadjustment();
+                    const maxScroll = adj.get_upper() - adj.get_page_size();
+                    adj.set_value(Math.min(maxScroll, adj.get_value() + adj.get_page_size()));
+                    updateIndicator();
+                }
+            })
+        ]
+    });
+};
 // Create Content
 const createContent = async () => {
     if (cachedContent) return cachedContent;
@@ -168,11 +211,19 @@ const createContent = async () => {
         });
 
         const handleScroll = debouncedScroll(scroll);
-        cachedContent = EventBox({
-            onScrollUp: (event) => handleScroll({ direction: 'up', event }),
-            onScrollDown: (event) => handleScroll({ direction: 'down', event }),
-            onPrimaryClick: () => App.closeWindow("wallselect"),
-            child: scroll,
+        const sliderControls = SliderControls(scroll);
+        
+        cachedContent = Widget.Box({
+            vertical: true,
+            children: [
+                EventBox({
+                    onScrollUp: (event) => handleScroll({ direction: 'up', event }),
+                    onScrollDown: (event) => handleScroll({ direction: 'down', event }),
+                    onPrimaryClick: () => App.closeWindow("wallselect"),
+                    child: scroll,
+                }),
+                sliderControls
+            ]
         });
 
         return cachedContent;

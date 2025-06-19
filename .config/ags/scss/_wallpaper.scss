@@ -1,7 +1,7 @@
 .wallpaper-list {
     .preview-box {
-        min-width: 150px;
-        min-height: 90px;
+        min-width: 176px;
+        min-height: 99px;
         background-size: cover;
         background-position: center;
         border-radius: 8px;
@@ -47,4 +47,30 @@
     &:active {
         background-color: mix($secondaryContainer, $onSecondaryContainer, 80%);
     }
+}
+
+.slider-controls {
+    margin: 10px 0;
+}
+.slider-btn {
+    padding: 8px;
+    border-radius: 50%;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+
+    &:hover {
+        background-color: mix($secondaryContainer, $onSecondaryContainer, 90%);
+    }
+    
+    &:active {
+        background-color: mix($secondaryContainer, $onSecondaryContainer, 80%);
+    }
+}
+
+.wall-position-indicator {
+    border-radius: 20px ;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    font-size: 1.1em;
+    min-width: 110px;
 }
