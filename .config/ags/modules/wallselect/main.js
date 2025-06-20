@@ -38,20 +38,27 @@ const getBarPosition = () => {
 const WallpaperButton = (thumbnailPath) => {
     const wallpaperPath = GLib.build_filenamev([
         WALLPAPER_DIR,
-        GLib.path_get_basename(thumbnailPath), // Ambil nama file dari thumbnail
+        GLib.path_get_basename(thumbnailPath)
     ]);
 
     return Widget.Button({
-        child: Box({
+        className: 'wallpaper-btn',
+        child: Widget.Box({
             className: "preview-box",
             css: `background-image: url("${thumbnailPath}");`,
         }),
         onClicked: () => {
-            Utils.execAsync(
-                `sh ${GLib.get_home_dir()}/.config/ags/scripts/color_generation/switchwall.sh "${wallpaperPath}"`,
-            );
+            Utils.execAsync(`sh ${GLib.get_home_dir()}/.config/ags/scripts/color_generation/switchwall.sh "${wallpaperPath}"`);
             App.closeWindow("wallselect");
         },
+        setup: (self) => {
+            self.on('enter-notify-event', () => {
+                self.toggleClassName('wallpaper-hovered', true);
+            });
+            self.on('leave-notify-event', () => {
+                self.toggleClassName('wallpaper-hovered', false);
+            });
+        }
     });
 };
 
@@ -189,6 +196,24 @@ const SliderControls = (scrollable) => {
 const createContent = async () => {
     if (cachedContent) return cachedContent;
 
+    // Tambahkan loading indicator
+    const loadingIndicator = Box({
+        className: 'wallpaper-loading',
+        vexpand: true,
+        children: [
+            Label({
+                label: "Please wait...",
+                className: "txt-large"
+            })
+        ]
+    });
+
+    // Tampilkan loading indicator terlebih dahulu
+    cachedContent = Box({
+        vertical: true,
+        children: [loadingIndicator]
+    });
+
     try {
         wallpaperPaths = await getWallpaperPaths();
 
@@ -213,33 +238,34 @@ const createContent = async () => {
         const handleScroll = debouncedScroll(scroll);
         const sliderControls = SliderControls(scroll);
         
-        cachedContent = Widget.Box({
-            vertical: true,
-            children: [
-                EventBox({
-                    onScrollUp: (event) => handleScroll({ direction: 'up', event }),
-                    onScrollDown: (event) => handleScroll({ direction: 'down', event }),
-                    onPrimaryClick: () => App.closeWindow("wallselect"),
-                    child: scroll,
-                }),
-                sliderControls
-            ]
-        });
+        // Ganti konten dengan yang sebenarnya setelah load selesai
+        cachedContent.children = [
+            EventBox({
+                onScrollUp: (event) => handleScroll({ direction: 'up', event }),
+                onScrollDown: (event) => handleScroll({ direction: 'down', event }),
+                onPrimaryClick: () => App.closeWindow("wallselect"),
+                child: scroll,
+            }),
+            sliderControls
+        ];
 
         return cachedContent;
     } catch (error) {
         console.error("Error loading wallpapers:", error);
-        return Box({
-            className: "wallpaper-error",
-            vexpand: true,
-            hexpand: true,
-            children: [
-                Label({
-                    label: "Error loading wallpapers. Check the console for details.",
-                    className: "txt-large txt-error",
-                }),
-            ],
-        });
+        cachedContent.children = [
+            Box({
+                className: "wallpaper-error",
+                vexpand: true,
+                hexpand: true,
+                children: [
+                    Label({
+                        label: "Error loading wallpapers. Check the console for details.",
+                        className: "txt-large txt-error",
+                    }),
+                ],
+            })
+        ];
+        return cachedContent;
     }
 };
 

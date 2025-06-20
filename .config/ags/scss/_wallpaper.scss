@@ -17,6 +17,17 @@
     }
 }
 
+.wallpaper-btn {
+    padding: 4px;
+    border-radius: 8px;
+    background: transparent;
+    transition: all 0.15s ease;
+}
+
+.wallpaper-btn.wallpaper-hovered {
+    background-color: mix($secondaryContainer, $onSecondaryContainer, 90%);
+}
+
 .wallpaper-window {
     @extend .sidebar-right;
 }
@@ -30,22 +41,6 @@
 
     .txt-subtext {
         opacity: 0.8;
-    }
-}
-
-.generate-thumbnails {
-    padding: 0.5rem 1rem;
-    border-radius: 9999px;
-    background-color: $secondaryContainer;
-    color: $onSecondaryContainer;
-    margin-right: 0.5rem;
-    
-    &:hover {
-        background-color: mix($secondaryContainer, $onSecondaryContainer, 90%);
-    }
-    
-    &:active {
-        background-color: mix($secondaryContainer, $onSecondaryContainer, 80%);
     }
 }
 
