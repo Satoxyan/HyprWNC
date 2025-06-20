@@ -3,7 +3,7 @@ set -e  # Exit on errors
 set -u  # Treat unset variables as errors
 
 # Paths configuration
-THUMBNAIL_DIR="$HOME/.cache/wallpapers/"
+THUMBNAIL_DIR="$HOME/.cache/ags/user/wallpapers/"
 WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
 
 # Ensure the thumbnail directory exists

@@ -14,6 +14,8 @@ let isLoading = false;
 const THUMBNAIL_DIR = GLib.build_filenamev([
     GLib.get_home_dir(),
     ".cache",
+    "ags",
+    "user",
     "wallpapers",
 ]);
 const WALLPAPER_DIR = GLib.build_filenamev([
@@ -141,7 +143,7 @@ const createPlaceholder = () => Box({
                     className: 'txt-large txt-bold',
                 }),
                 Label({
-                    label: 'Generate thumbnails to get started, place wallpapers in ~/Pictures/Wallpapers.',
+                    label: 'Place wallpapers in ~/Pictures/Wallpapers, then reopen this window and wait until thumbnail generated.',
                     className: 'txt-norm txt-subtext',
                 }),
             ],
@@ -268,33 +270,6 @@ const createContent = async () => {
         return cachedContent;
     }
 };
-
-// Кнопка генерации превью
-const GenerateButton = () => Widget.Button({
-    className: 'button-accent generate-thumbnails',
-    child: Box({
-        children: [
-            Widget.Icon({
-                icon: 'view-refresh-symbolic',
-                size: 16,
-            }),
-            Widget.Label({
-                label: ' Generate Thumbnails',
-            }),
-        ],
-    }),
-    tooltipText: 'Regenerate all wallpaper thumbnails',
-    onClicked: () => {
-        Utils.execAsync([
-            'bash',
-            `${GLib.get_home_dir()}/.config/ags/scripts/generate_thumbnails.sh`
-        ]).then(() => {
-            cachedContent = null;
-            App.closeWindow('wallselect');
-            App.openWindow('wallselect');
-        }).catch(console.error);
-    },
-});
 
 // Main Window
 export default () =>
