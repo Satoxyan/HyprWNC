@@ -201,11 +201,12 @@ apply_qt &
 apply_fuzzel &
 apply_term &
 
-#Executing lockcolor.sh on exit
+#Executing any script that needs to be run after colors are applied
 cleanup() {
     "$HOME/.config/ags/scripts/color_generation/lockcolor.sh"
     "$HOME/.config/ags/scripts/color_generation/cavacolor.sh"
     "$HOME/.config/ags/scripts/color_generation/kandocolor.sh"
+    "$HOME/.config/ags/scripts/color_generation/gradience.sh"
 }
 
 trap cleanup EXIT

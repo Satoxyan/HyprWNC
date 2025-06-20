@@ -1,0 +1,52 @@
+{
+    "name": "material",
+    "variables": {
+        "accent_color": "#ccbeff",
+        "accent_fg_color": "#33275e",
+        "accent_bg_color": "#ccbeff",
+        "window_bg_color": "#141318",
+        "window_fg_color": "#e6e1e9",
+        "headerbar_bg_color": "#141318",
+        "headerbar_fg_color": "#e6e1e9",
+        "popover_bg_color": "#141318",
+        "popover_fg_color": "#e6e1e9",
+        "view_bg_color": "#141318",
+        "view_fg_color": "#e6e1e9",
+        "card_bg_color": "#141318",
+        "card_fg_color": "#e6e1e9",
+        "sidebar_bg_color": "@window_bg_color",
+        "sidebar_fg_color": "@window_fg_color",
+        "sidebar_border_color": "@window_bg_color",
+        "sidebar_backdrop_color": "@window_bg_color",
+        "destructive_color": "#ccbeff",
+        "destructive_bg_color": "#ccbeff",
+        "destructive_fg_color": "#33275e",
+        "success_color": "#ccbeff",
+        "success_bg_color": "#ccbeff",
+        "success_fg_color": "#33275e",
+        "warning_color": "#ccbeff",
+        "warning_bg_color": "#ccbeff",
+        "warning_fg_color": "#33275e",
+        "error_color": "#ccbeff",
+        "error_bg_color": "#ccbeff",
+        "error_fg_color": "#33275e",
+        "dialog_bg_color": "#141318",
+        "dialog_fg_color": "#e6e1e9"
+    },
+    "palette": {
+        "blue_": {},
+        "green_": {},
+        "yellow_": {},
+        "orange_": {},
+        "red_": {},
+        "purple_": {},
+        "brown_": {},
+        "light_": {},
+        "dark_": {}
+    },
+    "custom_css": {
+        "gtk4": "",
+        "gtk3": ""
+    },
+    "plugins": {}
+}
