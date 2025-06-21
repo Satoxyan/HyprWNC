@@ -80,7 +80,7 @@
 </div>
 
 **Dynamic color lockscreen**
-![vlcsnap-2025-03-26-13h36m35s329](https://github.com/user-attachments/assets/c5244219-538d-4d43-a895-998f54764f39)
+![vlcsnap-2025-06-21-15h15m54s186](https://github.com/user-attachments/assets/9dae8daa-d8d8-4ba5-acfc-69c4ce85c4f2)
 _<sup>Idle with style</sup>_
 
 ### AI
