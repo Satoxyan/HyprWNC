@@ -19,16 +19,26 @@ done
 
 ########## Choose icon ###########
 if [[ $enable_battery == true ]]; then
-  if (( battery_level >= 95 )); then
-    battery_icon="" # Full
-  elif (( battery_level >= 75 )); then
-    battery_icon=""
+  if (( battery_level >= 100 )); then
+    battery_icon="󰁹" # Full
+  elif (( battery_level >= 90 )); then
+    battery_icon="󰂂"
+  elif (( battery_level >= 80 )); then
+    battery_icon="󰂁"
+  elif (( battery_level >= 70 )); then
+    battery_icon="󰂀"
+  elif (( battery_level >= 60 )); then
+    battery_icon="󰁿"
   elif (( battery_level >= 50 )); then
-    battery_icon=""
-  elif (( battery_level >= 25 )); then
-    battery_icon=""
+    battery_icon="󰁾"
+  elif (( battery_level >= 40 )); then
+    battery_icon="󰁽"
+  elif (( battery_level >= 30 )); then
+    battery_icon="󰁼"
+  elif (( battery_level >= 20 )); then
+    battery_icon="󰁻"
   else
-    battery_icon="" # Low
+    battery_icon="󰁺" # Low
   fi
 fi
 
