@@ -206,7 +206,6 @@ cleanup() {
     "$HOME/.config/ags/scripts/color_generation/lockcolor.sh"
     "$HOME/.config/ags/scripts/color_generation/cavacolor.sh"
     "$HOME/.config/ags/scripts/color_generation/kandocolor.sh"
-    "$HOME/.config/ags/scripts/color_generation/gradience.sh"
 }
 
 trap cleanup EXIT
