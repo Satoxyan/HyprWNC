@@ -57,7 +57,7 @@ const centerWidgets = [
         contentWidget: ModuleBluetooth,
     },
     {
-        name: getString('Networks'),
+        name: getString('Wifi networks'),
         materialIcon: 'wifi',
         contentWidget: ModuleWifiNetworks,
         onFocus: () => execAsync('nmcli dev wifi list').catch(print),
