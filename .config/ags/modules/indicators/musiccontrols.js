@@ -20,16 +20,19 @@ const COVER_COLORSCHEME_SUFFIX = '_colorscheme.css';
 var lastCoverPath = '';
 
 function isRealPlayer(player) {
+    const title = player.trackTitle?.toLowerCase?.() || "";
+
     return (
-        // Remove unecessary native buses from browsers if there's plasma integration
-        // !(hasPlasmaIntegration && player.busName.startsWith('org.mpris.MediaPlayer2.firefox')) &&
-        // !(hasPlasmaIntegration && player.busName.startsWith('org.mpris.MediaPlayer2.chromium')) &&
-        // playerctld just copies other buses and we don't need duplicates
+        // Hindari playerctld & instance mpd
         !player.busName.startsWith('org.mpris.MediaPlayer2.playerctld') &&
-        // Non-instance mpd bus
-        !(player.busName.endsWith('.mpd') && !player.busName.endsWith('MediaPlayer2.mpd'))
+        !(player.busName.endsWith('.mpd') && !player.busName.endsWith('MediaPlayer2.mpd')) &&
+
+        // Tambahan: hindari player yang hanya dari title bar browser
+        !title.startsWith('(') &&               // e.g. "(84) Judul Youtube..."
+        title.length > 0                        // pastikan ada isi
     );
 }
+
 
 export const getPlayer = (name = userOptions.music.preferredPlayer) => Mpris.getPlayer(name) || Mpris.players[0] || null;
 function lengthStr(length) {
