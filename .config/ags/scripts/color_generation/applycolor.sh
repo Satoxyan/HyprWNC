@@ -107,13 +107,27 @@ apply_hyprlock() {
     echo "Template file not found for hyprlock. Skipping that."
     return
   fi
+  
   # Copy template
   mkdir -p "$CACHE_DIR"/user/generated/hypr/
   cp "scripts/templates/hypr/hyprlock.conf" "$CACHE_DIR"/user/generated/hypr/hyprlock.conf
-  # Apply colors
-  # sed -i "s/{{ SWWW_WALL }}/${wallpath_png}/g" "$CACHE_DIR"/user/generated/hypr/hyprlock.conf
+
+  # Process each color
   for i in "${!colorlist[@]}"; do
-    sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$CACHE_DIR"/user/generated/hypr/hyprlock.conf
+    hex_color="${colorvalues[$i]#\#}"  # Remove # from hex
+    
+    # Replace HEX placeholder
+    sed -i "s/({{ ${colorlist[$i]} }})/(${hex_color})/g" "$CACHE_DIR"/user/generated/hypr/hyprlock.conf
+    
+    # Convert and replace RGBA if hex is valid
+    if [[ "$hex_color" =~ ^[0-9A-Fa-f]{6}$ ]]; then
+      r=$((0x${hex_color:0:2}))
+      g=$((0x${hex_color:2:2}))
+      b=$((0x${hex_color:4:2}))
+      rgba_color="($r, $g, $b, 1.0)"
+      
+      sed -i "s/({{ ${colorlist[$i]}_rgba }})/${rgba_color}/g" "$CACHE_DIR"/user/generated/hypr/hyprlock.conf
+    fi
   done
 
   cp "$CACHE_DIR"/user/generated/hypr/hyprlock.conf "$XDG_CONFIG_HOME"/hypr/hyprlock.conf
@@ -203,7 +217,6 @@ apply_term &
 
 #Executing any script that needs to be run after colors are applied
 cleanup() {
-    "$HOME/.config/ags/scripts/color_generation/lockcolor.sh"
     "$HOME/.config/ags/scripts/color_generation/cavacolor.sh"
     "$HOME/.config/ags/scripts/color_generation/kandocolor.sh"
 }
