@@ -21,7 +21,6 @@ let connectAttempt = '';
 let networkAuth = null;
 let networkAuthSSID = null;
 let passwordVisible = false;
-let ethernetInterface = ''; // Variabel untuk menyimpan nama interface Ethernet
 
 const WifiNetwork = (accessPoint) => {
     const networkStrength = MaterialIcon(MATERIAL_SYMBOL_SIGNAL_STRENGTH[accessPoint.iconName], 'hugerass')
@@ -44,23 +43,26 @@ const WifiNetwork = (accessPoint) => {
             connectAttempt = accessPoint.ssid;
             networkAuthSSID.label = `${getString('Connecting to')}: ${connectAttempt}`;
 
+            // Check if the SSID is stored
             execAsync(['nmcli', '-g', 'NAME', 'connection', 'show'])
                 .then((savedConnections) => {
                     const savedSSIDs = savedConnections.split('\n');
 
-                    if (!savedSSIDs.includes(connectAttempt)) {
+                    if (!savedSSIDs.includes(connectAttempt)) { // SSID not saved: show password input
                         if (networkAuth) {
                             networkAuth.revealChild = true;
                         }
-                    } else {
+                    } else { // If SSID is saved, hide password input
                         if (networkAuth) {
                             networkAuth.revealChild = false;
                         }
+                        // Connect
                         execAsync(['nmcli', 'device', 'wifi', 'connect', connectAttempt])
                             .catch(print);
                     }
                 })
                 .catch(print);
+
         },
         child: Box({
             className: 'sidebar-wifinetworks-network spacing-h-10',
@@ -97,75 +99,14 @@ const NetResource = (icon, command) => {
     return widget;
 }
 
-// Fungsi untuk mendeteksi nama interface Ethernet
-const detectEthernetInterface = async () => {
-    try {
-        const output = await execAsync(['nmcli', '-t', '-f', 'DEVICE,TYPE', 'device', 'status']);
-        const lines = output.split('\n');
-        
-        for (const line of lines) {
-            const [device, type] = line.split(':');
-            if (type === 'ethernet') {
-                return device;
-            }
-        }
-        return '';
-    } catch (err) {
-        console.error('Error detecting Ethernet interface:', err);
-        return '';
-    }
-};
-
 const CurrentNetwork = () => {
     const passwordVisible = Variable(false);
     let authLock = false;
     let timeoutId = null;
-    const connectionType = Variable('none'); // 'wifi', 'ethernet', or 'none'
 
     const bottomSeparator = Box({
         className: 'separator-line',
     });
-    
-    const getCurrentConnectionInfo = async () => {
-        try {
-            // Deteksi interface Ethernet jika belum terdeteksi
-            if (!ethernetInterface) {
-                ethernetInterface = await detectEthernetInterface();
-            }
-
-            const output = await execAsync(['nmcli', '-t', '-f', 'DEVICE,TYPE,CONNECTION', 'device', 'status']);
-            const lines = output.split('\n');
-            
-            let wifiActive = false;
-            let ethernetActive = false;
-            let currentConnection = 'Not connected';
-            
-            for (const line of lines) {
-                const [device, type, connection] = line.split(':');
-                // Gunakan ethernetInterface yang sudah terdeteksi
-                if (device === ethernetInterface && type === 'ethernet' && connection) {
-                    ethernetActive = true;
-                    currentConnection = connection;
-                    connectionType.value = 'ethernet';
-                }
-                if (device === 'wlan0' && type === 'wifi' && connection) {
-                    wifiActive = true;
-                    currentConnection = connection;
-                    connectionType.value = 'wifi';
-                }
-            }
-            
-            if (!wifiActive && !ethernetActive) {
-                connectionType.value = 'none';
-            }
-            
-            return currentConnection;
-        } catch (err) {
-            connectionType.value = 'none';
-            return 'Not connected';
-        }
-    };
-
     const networkName = Box({
         vertical: true,
         hexpand: true,
@@ -177,19 +118,14 @@ const CurrentNetwork = () => {
             }),
             Label({
                 hpack: 'start',
-                label: '',
-                setup: (self) => {
-                    const updateLabel = async () => {
-                        if (authLock) return;
-                        self.label = await getCurrentConnectionInfo();
-                    };
-                    self.hook(Network, updateLabel);
-                    self.poll(5000, updateLabel);
-                },
+                label: Network.wifi?.ssid,
+                setup: (self) => self.hook(Network, (self) => {
+                    if (authLock) return;
+                    self.label = Network.wifi?.ssid;
+                }),
             }),
         ]
     });
-
     const networkBandwidth = Box({
         vertical: true,
         hexpand: true,
@@ -200,14 +136,22 @@ const CurrentNetwork = () => {
             NetResource('arrow_cool_down', `${App.configDir}/scripts/network_scripts/network_bandwidth.py recv`),
         ]
     });
-
+    // const networkStatus = Box({
+    //     children: [Label({
+    //         vpack: 'center',
+    //         className: 'txt-subtext',
+    //         setup: (self) => self.hook(Network, (self) => {
+    //             if (authLock) return;
+    //             self.label = Network.wifi.state;
+    //         }),
+    //     })]
+    // });
     networkAuthSSID = Label({
         className: 'margin-left-5',
         hpack: 'start',
         hexpand: true,
         label: '',
     });
-    
     const cancelAuthButton = Button({
         className: 'txt sidebar-wifinetworks-network-button',
         label: getString('Cancel'),
@@ -217,11 +161,11 @@ const CurrentNetwork = () => {
             networkAuth.revealChild = false;
             authFailed.revealChild = false;
             networkAuthSSID.label = '';
+            networkName.children[1].label = Network.wifi?.ssid;
             authEntry.text = '';
         },
         setup: setupCursorHover,
     });
-    
     const authHeader = Box({
         vertical: false,
         hpack: 'fill',
@@ -231,7 +175,6 @@ const CurrentNetwork = () => {
             cancelAuthButton
         ]
     });
-    
     const authVisible = Button({
         vpack: 'center',
         child: MaterialIcon('visibility', 'large'),
@@ -246,7 +189,6 @@ const CurrentNetwork = () => {
             })
         },
     });
-    
     const authFailed = Revealer({
         revealChild: false,
         child: Label({
@@ -254,25 +196,26 @@ const CurrentNetwork = () => {
             label: getString('Authentication failed'),
         }),
     })
-    
     const authEntry = Entry({
         className: 'sidebar-wifinetworks-auth-entry',
         visibility: false,
         hexpand: true,
         onAccept: (self) => {
             authLock = false;
+            // Delete SSID connection before attempting to reconnect
             execAsync(['nmcli', 'connection', 'delete', connectAttempt])
-                .catch(() => { });
+                .catch(() => { }); // Ignore error if SSID not found
 
             execAsync(['nmcli', 'device', 'wifi', 'connect', connectAttempt, 'password', self.text])
                 .then(() => {
-                    connectAttempt = '';
-                    networkAuth.revealChild = false;
-                    authFailed.revealChild = false;
-                    self.text = '';
+                    connectAttempt = ''; // Reset SSID after successful connection
+                    networkAuth.revealChild = false; // Hide input if successful
+                    authFailed.revealChild = false; // Hide failed message if successful
+                    self.text = ''; // Empty input for retry
                     passwordVisible.value = false;
                 })
                 .catch(() => {
+                    // Connection failed, show password input again
                     networkAuth.revealChild = true;
                     authFailed.revealChild = true;
                 });
@@ -282,7 +225,6 @@ const CurrentNetwork = () => {
         }),
         placeholderText: getString('Enter network password'),
     });
-    
     const authBox = Box({
         className: 'sidebar-wifinetworks-auth-box',
         children: [
@@ -290,48 +232,49 @@ const CurrentNetwork = () => {
             authVisible,
         ]
     });
-    
     const forgetButton = Button({
         label: getString('Forget'),
+        hexpand: true,
         className: 'txt sidebar-wifinetworks-network-button',
-        onClicked: async () => {
-            try {
-                const currentConn = await getCurrentConnectionInfo();
-                if (currentConn !== 'Not connected' && connectionType.value === 'wifi') {
-                    await execAsync(['nmcli', 'connection', 'delete', currentConn]);
-                }
-            } catch (err) {
-                Utils.execAsync(['notify-send',
-                    "Network",
-                    `Failed to forget network\n${err}`,
-                    '-a', 'ags',
-                ]).catch(print);
-            }
+        onClicked: () => {
+            execAsync(['nmcli', '-t', '-f', 'ACTIVE,NAME', 'connection', 'show'])
+                .then(output => {
+                    const activeSSID = output
+                        .split('\n')
+                        .find(line => line.startsWith('yes:'))
+                        ?.split(':')[1];
+
+                    if (activeSSID) {
+                        execAsync(['nmcli', 'connection', 'delete', activeSSID])
+                            .catch(err => Utils.execAsync(['notify-send',
+                                "Network",
+                                `Failed to forget network - Hold to copy\n${err}`,
+                                '-a', 'ags',
+                            ]).catch(print));
+                    }
+                })
+                .catch();
         },
         setup: setupCursorHover,
     });
-    
     const propertiesButton = Button({
         label: getString('Properties'),
         className: 'txt sidebar-wifinetworks-network-button',
-        onClicked: async () => {
-            try {
-                const output = await execAsync('nmcli -t -f uuid connection show --active');
-                if (output.trim()) {
-                    Utils.execAsync(`nm-connection-editor --edit ${output.trim()}`);
+        hexpand: true,
+        onClicked: () => {
+            Utils.execAsync('nmcli -t -f uuid connection show --active').then(uuid => {
+                if (uuid.trim()) {
+                    Utils.execAsync(`nm-connection-editor --edit ${uuid.trim()}`);
                 }
                 closeEverything();
-            } catch (err) {
-                Utils.execAsync(['notify-send',
-                    "Network",
-                    `Failed to get connection UUID\n${err}`,
-                    '-a', 'ags',
-                ]).catch(print);
-            }
+            }).catch(err => Utils.execAsync(['notify-send',
+                "Network",
+                `Failed to get connection UUID - Hold to copy\n${err}`,
+                '-a', 'ags',
+            ]).catch(print));
         },
         setup: setupCursorHover,
     });
-    
     const networkProp = Revealer({
         transition: 'slide_down',
         transitionDuration: userOptions.animations.durationLarge,
@@ -340,32 +283,15 @@ const CurrentNetwork = () => {
             homogeneous: true,
             children: [
                 propertiesButton,
-                // Forget button will be added conditionally for WiFi
+                forgetButton,
             ],
-            setup: (self) => {
-                // Dynamically update buttons based on connection type
-                const updateButtons = () => {
-                    if (connectionType.value === 'wifi') {
-                        self.children = [propertiesButton, forgetButton];
-                    } else {
-                        self.children = [propertiesButton];
-                    }
-                };
-                
-                self.hook(connectionType, updateButtons);
-                updateButtons();
-            },
+            setup: setupCursorHover,
         }),
-        setup: (self) => {
-            const updateVisibility = async () => {
-                const conn = await getCurrentConnectionInfo();
-                self.revealChild = conn !== 'Not connected';
-            };
-            self.hook(Network, updateVisibility);
-            self.poll(5000, updateVisibility);
-        },
+        setup: (self) => self.hook(Network, (self) => {
+            if (Network.wifi?.ssid === '') self.revealChild = false;
+            else self.revealChild = true;
+        }),
     });
-    
     networkAuth = Revealer({
         transition: 'slide_down',
         transitionDuration: userOptions.animations.durationLarge,
@@ -382,10 +308,10 @@ const CurrentNetwork = () => {
             execAsync(['nmcli', '-g', 'NAME', 'connection', 'show'])
                 .then((savedConnections) => {
                     const savedSSIDs = savedConnections.split('\n');
-                    if (Network.wifi?.state == 'failed' ||
-                        (Network.wifi?.state == 'need_auth' && !savedSSIDs.includes(Network.wifi?.ssid))) {
+                    if (Network.wifi.state == 'failed' ||
+                        (Network.wifi.state == 'need_auth' && !savedSSIDs.includes(Network.wifi.ssid))) {
                         authLock = true;
-                        connectAttempt = Network.wifi?.ssid;
+                        connectAttempt = Network.wifi.ssid;
                         self.revealChild = true;
                         if (timeoutId) {
                             clearTimeout(timeoutId);
@@ -395,16 +321,13 @@ const CurrentNetwork = () => {
                             passwordVisible.value = false;
                             self.revealChild = false;
                             authFailed.revealChild = false;
-                            if (Network.wifi) {
-                                Network.wifi.state = 'activated';
-                            }
-                        }, 60000);
+                            Network.wifi.state = 'activated';
+                        }, 60000); // 60 seconds timeout
                     }
                 }
                 ).catch(print);
         }),
     });
-    
     const actualContent = Box({
         vertical: true,
         className: 'spacing-v-10',
@@ -419,6 +342,7 @@ const CurrentNetwork = () => {
                             MaterialIcon('language', 'hugerass'),
                             networkName,
                             networkBandwidth,
+                            // networkStatus,
                         ]
                     }),
                     networkProp,
@@ -428,13 +352,12 @@ const CurrentNetwork = () => {
             bottomSeparator,
         ]
     });
-    
     return Box({
         vertical: true,
         children: [Revealer({
             transition: 'slide_down',
             transitionDuration: userOptions.animations.durationLarge,
-            revealChild: true, // Always show for both WiFi and Ethernet
+            revealChild: Network.wifi,
             child: actualContent,
         })]
     })
@@ -453,10 +376,12 @@ export default (props) => {
                         'updateNetworks': (self) => {
                             const accessPoints = Network.wifi?.access_points || [];
                             self.children = Object.values(accessPoints.reduce((a, accessPoint) => {
+                                // Only keep max strength networks by ssid
                                 if (!a[accessPoint.ssid] || a[accessPoint.ssid].strength < accessPoint.strength) {
                                     a[accessPoint.ssid] = accessPoint;
                                     a[accessPoint.ssid].active |= accessPoint.active;
                                 }
+
                                 return a;
                             }, {})).map(n => WifiNetwork(n));
                         },
@@ -471,7 +396,6 @@ export default (props) => {
             })]
         })]
     });
-    
     const bottomBar = Box({
         homogeneous: true,
         children: [Button({
@@ -485,7 +409,6 @@ export default (props) => {
             setup: setupCursorHover,
         })],
     })
-    
     return Box({
         ...props,
         className: 'spacing-v-10',
