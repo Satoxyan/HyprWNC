@@ -21,7 +21,7 @@ let connectAttempt = '';
 let networkAuth = null;
 let networkAuthSSID = null;
 let passwordVisible = false;
-let ethernetInterface = '';
+let ethernetInterface = ''; // Variabel untuk menyimpan nama interface Ethernet
 
 const WifiNetwork = (accessPoint) => {
     const networkStrength = MaterialIcon(MATERIAL_SYMBOL_SIGNAL_STRENGTH[accessPoint.iconName], 'hugerass')
@@ -97,6 +97,7 @@ const NetResource = (icon, command) => {
     return widget;
 }
 
+// Fungsi untuk mendeteksi nama interface Ethernet
 const detectEthernetInterface = async () => {
     try {
         const output = await execAsync(['nmcli', '-t', '-f', 'DEVICE,TYPE', 'device', 'status']);
@@ -119,7 +120,7 @@ const CurrentNetwork = () => {
     const passwordVisible = Variable(false);
     let authLock = false;
     let timeoutId = null;
-    const connectionType = Variable('none');
+    const connectionType = Variable('none'); // 'wifi', 'ethernet', or 'none'
 
     const bottomSeparator = Box({
         className: 'separator-line',
@@ -127,6 +128,7 @@ const CurrentNetwork = () => {
     
     const getCurrentConnectionInfo = async () => {
         try {
+            // Deteksi interface Ethernet jika belum terdeteksi
             if (!ethernetInterface) {
                 ethernetInterface = await detectEthernetInterface();
             }
@@ -136,13 +138,14 @@ const CurrentNetwork = () => {
             
             let wifiActive = false;
             let ethernetActive = false;
-            let currentConnection = 'Not Connected';
+            let currentConnection = 'Not connected';
             
             for (const line of lines) {
                 const [device, type, connection] = line.split(':');
+                // Gunakan ethernetInterface yang sudah terdeteksi
                 if (device === ethernetInterface && type === 'ethernet' && connection) {
                     ethernetActive = true;
-                    currentConnection = 'Wired Connection';
+                    currentConnection = connection;
                     connectionType.value = 'ethernet';
                 }
                 if (device === 'wlan0' && type === 'wifi' && connection) {
@@ -337,8 +340,10 @@ const CurrentNetwork = () => {
             homogeneous: true,
             children: [
                 propertiesButton,
+                // Forget button will be added conditionally for WiFi
             ],
             setup: (self) => {
+                // Dynamically update buttons based on connection type
                 const updateButtons = () => {
                     if (connectionType.value === 'wifi') {
                         self.children = [propertiesButton, forgetButton];
@@ -429,7 +434,7 @@ const CurrentNetwork = () => {
         children: [Revealer({
             transition: 'slide_down',
             transitionDuration: userOptions.animations.durationLarge,
-            revealChild: true,
+            revealChild: true, // Always show for both WiFi and Ethernet
             child: actualContent,
         })]
     })
