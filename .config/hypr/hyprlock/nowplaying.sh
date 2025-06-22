@@ -68,7 +68,9 @@ if [[ "$status" == "Playing" || "$status" == "Paused" ]]; then
   total_raw=$(playerctl metadata mpris:length 2>/dev/null)
   total=$(( total_raw / 1000000 ))
 
-  echo "$(format_time "$current") $(progress_bar "$current" "$total") $(format_time "$total")"
+  if (( total > 0 )); then
+    echo "$(format_time "$current") $(progress_bar "$current" "$total") $(format_time "$total")"
+  fi
 else
   echo "󰎇 No media playing"
 fi
