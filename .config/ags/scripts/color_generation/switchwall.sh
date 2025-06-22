@@ -86,7 +86,9 @@ switch() {
     # Dapatkan ekstensi asli file (jpg, png, dll.)
     ext="${imgpath##*.}"
     ext=$(echo "$ext" | tr '[:upper:]' '[:lower:]')
-    [[ -z "$ext" || ! "$ext" =~ ^(jpg|jpeg|png|bmp|webp)$ ]] && ext="jpg"
+    cp "$imgpath" "$CACHE_FILE"
+    ln -sf "$CACHE_FILE" "$THUMBNAIL_DIR/wallpaper"
+
 
     if is_video "$imgpath"; then
         missing_deps=()
@@ -128,7 +130,7 @@ switch() {
         fi
 
     else
-        CACHE_FILE="$THUMBNAIL_DIR/wall.jpg"
+        CACHE_FILE="$THUMBNAIL_DIR/wall.$ext"
         cp "$imgpath" "$CACHE_FILE"
         ln -sf "$CACHE_FILE" "$THUMBNAIL_DIR/wallpaper"
         swww img "$imgpath" --transition-step $TRAN_STEP --transition-fps $FRAME \
