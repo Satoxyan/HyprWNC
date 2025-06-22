@@ -27,10 +27,12 @@ progress_bar() {
   local pos=$(( current * width / total ))
   local bar=""
   for ((i = 0; i < width; i++)); do
-    if (( i == pos )); then
-      bar+="●"
+    if (( i < pos )); then
+      bar+="󰜥"  # bagian yang sudah dilewati
+    elif (( i == pos )); then
+      bar+="●"  # posisi saat ini
     else
-      bar+="─"
+      bar+="─"  # bagian yang belum dilewati
     fi
   done
   echo "$bar"
