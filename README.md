@@ -1,6 +1,6 @@
 <div align="center">
-    <h1>【 HyprWNC 】</h1>
-    <h2>Intend to maintain end-4 deprecated AGS dots</h2>
+    <h1>【 HyprWNC 】<br>
+    Intend to maintain end-4 deprecated AGS dots </h1>
 </div>
 
 <div align="center"> 
@@ -80,7 +80,7 @@
 </div>
 
 **Dynamic color lockscreen**
-![vlcsnap-2025-06-21-15h15m54s186](https://github.com/user-attachments/assets/9dae8daa-d8d8-4ba5-acfc-69c4ce85c4f2)
+![vlcsnap-2025-06-22-16h12m22s822](https://github.com/user-attachments/assets/8cb7e367-05ee-45aa-9e78-5d751532bb86)
 _<sup>Idle with style</sup>_
 
 ### AI
