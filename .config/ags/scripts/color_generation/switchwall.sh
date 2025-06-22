@@ -7,7 +7,7 @@ CACHE_DIR="$XDG_CACHE_HOME/ags"
 
 # Direktori cache untuk wallpaper
 CACHE_FILE="$THUMBNAIL_DIR/wall.$ext"
-THUMBNAIL_DIR="$HOME/.cache/swww"
+THUMBNAIL_DIR="$HOME/.cache/ags/user/lockscreen"
 CUSTOM_DIR="$XDG_CONFIG_HOME/hypr/custom"
 RESTORE_SCRIPT_DIR="$CUSTOM_DIR/scripts"
 RESTORE_SCRIPT="$RESTORE_SCRIPT_DIR/__restore_video_wallpaper.sh"
