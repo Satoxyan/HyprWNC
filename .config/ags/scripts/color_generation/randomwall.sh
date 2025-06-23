@@ -4,7 +4,7 @@ XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 CONFIG_DIR="$XDG_CONFIG_HOME/ags"
 
 # Cache DIR
-CACHE_DIR="$HOME/.cache/swww"
+CACHE_DIR="$HOME/.cache/ags/user/lockscreen"
 CACHE_FILE="$CACHE_DIR/wall.$ext"
 WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
 
