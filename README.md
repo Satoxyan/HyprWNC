@@ -108,7 +108,7 @@ _<sup>Get yande.re and konachan images from sidebar</sup>_
   <img src="assets/sample.gif" width="1200">
 </p>
 
-_<sup>Get faster for opening app, not just by keyboard, but also by mouse!</sup>_
+_<sup>Get faster for opening app, not just by keyboard, but also by mouse! (need to install "kando-bin" manually)</sup>_
 
 <div align="center">
     <h2>• thank you •</h2>
