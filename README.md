@@ -1,6 +1,7 @@
 <div align="center">
     <h1>【 HyprWNC 】<br>
-    Intend to maintain end-4 deprecated AGS dots </h1>
+    *WARNING: Unmaintained dotfiles*
+        <h3>currently using quickshell: https://github.com/Satoxyan/dots-hyprfork</h3>
 </div>
 
 <div align="center"> 
